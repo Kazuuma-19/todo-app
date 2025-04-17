@@ -6,7 +6,7 @@ type Todo = {
   id: string;
   completed: boolean;
   name: string;
-  dateTime: Date;
+  date: string;
 };
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
       {todos.map((todo) => (
         <div key={todo.id}>
           <h2>{todo.name}</h2>
-          {/* <p>{todo.dateTime}</p> */}
+          <p>{todo.date}</p>
         </div>
       ))}
       <Button>Click me</Button>
