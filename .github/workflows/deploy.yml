@@ -1,0 +1,40 @@
+name: Deploy React App to S3
+
+on:
+  push:
+    branches:
+      - main  # `main`ブランチにpushしたらこのアクションが実行される
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # GitHub Actionsの実行環境（最新のUbuntu）
+
+    defaults:
+      run:
+        working-directory: frontend  # Reactアプリのルートディレクトリ
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4  # リポジトリからコードをクローン
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'  # 使用するNode.jsのバージョン
+
+      - name: Install dependencies
+        run: npm install  # 必要な依存パッケージをインストール
+
+      - name: Build React app
+        run: npm run build  # Reactアプリをビルド
+
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master  # S3への同期アクション
+        with:
+          args: --delete  # S3の古いファイルを削除
+        env:
+          AWS_S3_BUCKET: your-bucket-name  # 実際のS3バケット名に変更
+          AWS_REGION: ap-northeast-1  # S3バケットのリージョン（例:東京リージョン）
+          SOURCE_DIR: frontend/dist  # ビルドされたアプリが入るディレクトリ
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # GitHub SecretsからAWSのアクセスキーIDを取得
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # GitHub SecretsからAWSのシークレットアクセスキーを取得
