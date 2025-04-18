@@ -33,7 +33,7 @@ jobs:
         with:
           args: --delete  # S3の古いファイルを削除
         env:
-          AWS_S3_BUCKET: your-bucket-name  # 実際のS3バケット名に変更
+          AWS_S3_BUCKET: todo-app-front  # 実際のS3バケット名に変更
           AWS_REGION: ap-northeast-1  # S3バケットのリージョン（例:東京リージョン）
           SOURCE_DIR: frontend/dist  # ビルドされたアプリが入るディレクトリ
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # GitHub SecretsからAWSのアクセスキーIDを取得
