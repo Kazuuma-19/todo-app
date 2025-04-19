@@ -23,6 +23,7 @@ function App() {
 
   return (
     <>
+      <h1>Github Actions Test</h1>
       {todos.map((todo) => (
         <div key={todo.id}>
           <h2>{todo.name}</h2>
