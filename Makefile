@@ -14,3 +14,7 @@ down:
 # コンテナ内に入る
 exec:
 	docker compose exec app sh
+
+# postgreSQL操作
+psql:
+	docker compose exec db psql -U root -d todo_app
