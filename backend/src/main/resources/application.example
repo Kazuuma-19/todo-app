@@ -1,9 +1,6 @@
 spring.application.name=todo-app
-
-spring.datasource.url=jdbc:postgresql://localhost:5432/
-spring.datasource.username=your_name
-#spring.datasource.password=your_db_password
-
+# spring profile(local, prod)
+spring.profiles.active=your_profile
 # update table automatically based on Entity
 spring.jpa.hibernate.ddl-auto=update
 # using postgresql
