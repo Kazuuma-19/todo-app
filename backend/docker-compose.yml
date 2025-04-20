@@ -1,7 +1,7 @@
 services:
   app:
     build:
-      context: ./backend
+      context: .
     image: todo-app:latest # Image name
     container_name: todo-app
     ports:

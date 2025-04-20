@@ -2,19 +2,19 @@ build:
 	cd backend && ./gradlew build
 
 up:
-	docker compose up --build
+	docker compose -f backend/docker-compose.yml up --build
 
 build-up:
 	make build
 	make up
 
 down:
-	docker compose down
+	docker compose -f backend/docker-compose.yml down
 
 # コンテナ内に入る
 exec:
-	docker compose exec app sh
+	docker compose -f backend/docker-compose.yml exec app sh
 
 # postgreSQL操作
 psql:
-	docker compose exec db psql -U root -d todo_app
+	docker compose -f backend/docker-compose.yml exec db psql -U root -d todo_app
