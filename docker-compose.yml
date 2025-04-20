@@ -1,0 +1,8 @@
+services:
+  app:
+    build:
+      context: ./backend
+    image: todo-app:latest # Image name
+    container_name: todo-app
+    ports:
+      - "8080:8080"
