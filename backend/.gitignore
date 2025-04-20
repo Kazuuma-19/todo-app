@@ -39,3 +39,5 @@ out/
 application.properties
 application-local.properties
 application-prod.properties
+
+.env
