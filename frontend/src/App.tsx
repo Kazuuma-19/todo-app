@@ -24,6 +24,13 @@ function App() {
     console.log("delete", id);
   };
 
+  const handleEdit = async (
+    id: string,
+    updates: { name: string; date: string },
+  ) => {
+    console.log("edit", id, updates);
+  };
+
   return (
     <Layout>
       <div className="max-w-4xl mx-auto">
@@ -31,6 +38,7 @@ function App() {
           todos={todos}
           onToggleComplete={handleToggleComplete}
           onDelete={handleDelete}
+          onEdit={handleEdit}
         />
       </div>
     </Layout>
