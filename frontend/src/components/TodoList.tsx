@@ -5,14 +5,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 import type { Todo } from "@/types/todo";
 
 type TodoListProps = {
   todos: Todo[];
   onToggleComplete: (id: string) => void;
+  onDelete: (id: string) => void;
 };
 
-export function TodoList({ todos, onToggleComplete }: TodoListProps) {
+export function TodoList({ todos, onToggleComplete, onDelete }: TodoListProps) {
   return (
     <div className="space-y-4">
       {todos.map((todo) => (
@@ -23,13 +26,21 @@ export function TodoList({ todos, onToggleComplete }: TodoListProps) {
               onCheckedChange={() => onToggleComplete(todo.id)}
             />
 
-            <div>
+            <div className="flex-1">
               <CardTitle className={todo.completed ? "line-through" : ""}>
                 {todo.name}
               </CardTitle>
 
               <CardDescription>{todo.date}</CardDescription>
             </div>
+
+            <Button
+              variant="ghost"
+              className="h-8 w-8 text-gray-500 hover:text-red-500"
+              onClick={() => onDelete(todo.id)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
           </CardHeader>
         </Card>
       ))}

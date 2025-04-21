@@ -20,10 +20,18 @@ function App() {
     console.log(id);
   };
 
+  const handleDelete = async (id: string) => {
+    console.log("delete", id);
+  };
+
   return (
     <Layout>
       <div className="max-w-4xl mx-auto">
-        <TodoList todos={todos} onToggleComplete={handleToggleComplete} />
+        <TodoList
+          todos={todos}
+          onToggleComplete={handleToggleComplete}
+          onDelete={handleDelete}
+        />
       </div>
     </Layout>
   );
