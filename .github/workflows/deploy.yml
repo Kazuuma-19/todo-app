@@ -81,6 +81,6 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd ~/todo-app
+            cd ~/todo-app/backend
             docker compose down
             docker compose up --build -d
