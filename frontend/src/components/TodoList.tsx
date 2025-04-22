@@ -11,11 +11,10 @@ import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import type { Todo } from "@/types/todo";
 import { formatDateForInput } from "@/utils/formatDate";
-import type { CheckedState } from "@radix-ui/react-checkbox";
 
 type TodoListProps = {
   todos: Todo[];
-  onToggleComplete: (id: string) => void;
+  onToggleComplete: (id: string, completed: boolean) => void;
   onDelete: (id: string) => void;
   onEdit: (updates: { id: string; name: string; date: string }) => void;
 };
@@ -123,9 +122,10 @@ export function TodoList({
               <>
                 <Checkbox
                   checked={todo.completed}
-                  onCheckedChange={(checked: CheckedState) => {
-                    onToggleComplete(todo.id);
+                  onCheckedChange={(checked) => {
+                    onToggleComplete(todo.id, Boolean(checked));
                   }}
+                  onClick={(e) => e.stopPropagation()}
                 />
 
                 <CardTitle className={todo.completed ? "line-through" : ""}>

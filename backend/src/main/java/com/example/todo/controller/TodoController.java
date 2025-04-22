@@ -22,7 +22,7 @@ public class TodoController {
 
     @GetMapping
     public List<Todo> getTodos() {
-        return todoRepository.findAll();
+        return todoRepository.findAllByOrderByIdAsc();
     }
 
     @PostMapping

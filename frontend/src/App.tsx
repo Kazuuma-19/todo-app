@@ -16,8 +16,11 @@ function App() {
     getTodos();
   }, [getTodos]);
 
-  const handleToggleComplete = async (id: string) => {
-    console.log(id);
+  const handleToggleComplete = async (id: string, completed: boolean) => {
+    await axios.patch(`http://localhost:8080/todos/${id}/completed`, {
+      completed,
+    });
+    getTodos();
   };
 
   const handleEdit = async (updates: {
