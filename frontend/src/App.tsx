@@ -40,6 +40,11 @@ function App() {
     getTodos();
   };
 
+  const handleCreate = async (todo: { name: string; date: string }) => {
+    await axios.post("http://localhost:8080/todos", todo);
+    getTodos();
+  };
+
   return (
     <Layout>
       <div className="max-w-4xl mx-auto">
@@ -48,6 +53,7 @@ function App() {
           onToggleComplete={handleToggleComplete}
           onDelete={handleDelete}
           onEdit={handleEdit}
+          onCreate={handleCreate}
         />
       </div>
     </Layout>

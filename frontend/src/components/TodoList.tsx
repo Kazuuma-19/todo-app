@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Trash2 } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
 import { useState } from "react";
 import type { Todo } from "@/types/todo";
 import { formatDateForInput } from "@/utils/formatDate";
@@ -17,6 +17,7 @@ type TodoListProps = {
   onToggleComplete: (id: string, completed: boolean) => void;
   onDelete: (id: string) => void;
   onEdit: (updates: { id: string; name: string; date: string }) => void;
+  onCreate: (todo: { name: string; date: string }) => void;
 };
 
 export function TodoList({
@@ -24,6 +25,7 @@ export function TodoList({
   onToggleComplete,
   onDelete,
   onEdit,
+  onCreate,
 }: TodoListProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editValues, setEditValues] = useState<{
@@ -34,6 +36,11 @@ export function TodoList({
     id: "",
     name: "",
     date: "",
+  });
+  const [isCreating, setIsCreating] = useState<boolean>(false);
+  const [newTodo, setNewTodo] = useState<{ name: string; date: string }>({
+    name: "",
+    date: formatDateForInput(new Date().toISOString()),
   });
 
   const handleEditClick = (todo: Todo) => {
@@ -54,12 +61,31 @@ export function TodoList({
     setIsEditing(false);
   };
 
-  // キーボードのkeyが押された際の処理
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleCreateSubmit = () => {
+    onCreate({
+      name: newTodo.name,
+      date: `${newTodo.date}T00:00:00`,
+    });
+    setIsCreating(false);
+    setNewTodo({
+      name: "",
+      date: formatDateForInput(new Date().toISOString()),
+    });
+  };
+
+  const handleEditKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       handleEditSubmit();
     } else if (e.key === "Escape") {
       setIsEditing(false);
+    }
+  };
+
+  const handleCreateKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleCreateSubmit();
+    } else if (e.key === "Escape") {
+      setIsCreating(false);
     }
   };
 
@@ -82,7 +108,7 @@ export function TodoList({
                   onChange={(e) =>
                     setEditValues({ ...editValues, name: e.target.value })
                   }
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={handleEditKeyDown}
                   onClick={(e) => e.stopPropagation()}
                   autoFocus
                 />
@@ -93,7 +119,7 @@ export function TodoList({
                   onChange={(e) => {
                     setEditValues({ ...editValues, date: e.target.value });
                   }}
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={handleEditKeyDown}
                   onClick={(e) => e.stopPropagation()}
                 />
 
@@ -151,6 +177,71 @@ export function TodoList({
           </CardHeader>
         </Card>
       ))}
+
+      {isCreating ? (
+        <Card>
+          <CardHeader className="flex items-center space-x-4">
+            <div className="flex-1 space-y-2">
+              <Input
+                value={newTodo.name}
+                className="h-7"
+                placeholder="Task name"
+                onChange={(e) =>
+                  setNewTodo({ ...newTodo, name: e.target.value })
+                }
+                onKeyDown={handleCreateKeyDown}
+                onClick={(e) => e.stopPropagation()}
+                autoFocus
+              />
+              <Input
+                type="date"
+                value={newTodo.date}
+                className="h-7"
+                onChange={(e) => {
+                  setNewTodo({ ...newTodo, date: e.target.value });
+                }}
+                onKeyDown={handleCreateKeyDown}
+                onClick={(e) => e.stopPropagation()}
+              />
+
+              <div className="flex items-center justify-end gap-2">
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCreateSubmit();
+                  }}
+                >
+                  Add
+                </Button>
+
+                <Button
+                  variant="outline"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsCreating(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+        </Card>
+      ) : (
+        <div
+          className="flex items-center space-x-2 my-6 p-4 rounded-lg cursor-pointer hover:bg-gray-50"
+          onClick={() => setIsCreating(true)}
+          onKeyDown={(e) => {
+            // TODO: 設定する
+            if (e.key === "Enter") {
+              setIsCreating(true);
+            }
+          }}
+        >
+          <Plus className="h-4 w-4" />
+          <CardTitle>Add Task</CardTitle>
+        </div>
+      )}
     </div>
   );
 }
