@@ -9,14 +9,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
-import { format, parseISO } from "date-fns";
 import type { Todo } from "@/types/todo";
+import { formatDateForInput } from "@/utils/formatDate";
+import type { CheckedState } from "@radix-ui/react-checkbox";
 
 type TodoListProps = {
   todos: Todo[];
   onToggleComplete: (id: string) => void;
   onDelete: (id: string) => void;
-  onEdit: (id: string, updates: { name: string; date: string }) => void;
+  onEdit: (updates: { id: string; name: string; date: string }) => void;
 };
 
 export function TodoList({
@@ -25,37 +26,41 @@ export function TodoList({
   onDelete,
   onEdit,
 }: TodoListProps) {
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editValues, setEditValues] = useState({ name: "", date: "" });
-
-  // PP = "Apr 29, 1453"
-  const formatDisplayDate = (dateString: string) => {
-    return format(parseISO(dateString), "PP");
-  };
-
-  const formatDateForInput = (dateString: string) => {
-    return format(parseISO(dateString), "yyyy-MM-dd");
-  };
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editValues, setEditValues] = useState<{
+    id: string;
+    name: string;
+    date: string;
+  }>({
+    id: "",
+    name: "",
+    date: "",
+  });
 
   const handleEditClick = (todo: Todo) => {
-    setEditingId(todo.id);
+    setIsEditing(true);
     setEditValues({
+      id: todo.id,
       name: todo.name,
       date: formatDateForInput(todo.date),
     });
   };
 
-  const handleEditSubmit = (id: string) => {
-    onEdit(id, editValues);
-    setEditingId(null);
+  const handleEditSubmit = () => {
+    onEdit({
+      id: editValues.id,
+      name: editValues.name,
+      date: `${editValues.date}T00:00:00`,
+    });
+    setIsEditing(false);
   };
 
   // キーボードのkeyが押された際の処理
-  const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      handleEditSubmit(id);
+      handleEditSubmit();
     } else if (e.key === "Escape") {
-      setEditingId(null);
+      setIsEditing(false);
     }
   };
 
@@ -70,69 +75,68 @@ export function TodoList({
           onClick={() => handleEditClick(todo)}
         >
           <CardHeader className="flex items-center space-x-4">
-            <Checkbox
-              checked={todo.completed}
-              onCheckedChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                e.stopPropagation();
-                onToggleComplete(todo.id);
-              }}
-            />
+            {isEditing && editValues.id === todo.id ? (
+              <div className="flex-1 space-y-2">
+                <Input
+                  value={editValues.name}
+                  className="h-7"
+                  onChange={(e) =>
+                    setEditValues({ ...editValues, name: e.target.value })
+                  }
+                  onKeyDown={handleKeyDown}
+                  onClick={(e) => e.stopPropagation()}
+                  autoFocus
+                />
+                <Input
+                  type="date"
+                  value={editValues.date}
+                  className="h-7"
+                  onChange={(e) => {
+                    setEditValues({ ...editValues, date: e.target.value });
+                  }}
+                  onKeyDown={handleKeyDown}
+                  onClick={(e) => e.stopPropagation()}
+                />
 
-            <div className="flex-1 space-y-2">
-              {editingId === todo.id ? (
-                <>
-                  <Input
-                    value={editValues.name}
-                    onChange={(e) =>
-                      setEditValues({ ...editValues, name: e.target.value })
-                    }
-                    onKeyDown={(e) => handleKeyDown(e, todo.id)}
-                    autoFocus
-                    className="h-7"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  <Input
-                    type="date"
-                    value={editValues.date}
-                    onChange={(e) =>
-                      setEditValues({ ...editValues, date: e.target.value })
-                    }
-                    onKeyDown={(e) => handleKeyDown(e, todo.id)}
-                    className="h-7"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  <div className="flex gap-2 justify-end">
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditSubmit(todo.id);
-                      }}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingId(null);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <CardTitle className={todo.completed ? "line-through" : ""}>
-                    {todo.name}
-                  </CardTitle>
+                <div className="flex items-center justify-end gap-2">
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditSubmit();
+                    }}
+                  >
+                    Save
+                  </Button>
 
-                  <CardDescription>
-                    {formatDisplayDate(todo.date)}
-                  </CardDescription>
-                </>
-              )}
-            </div>
+                  <Button
+                    variant="outline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsEditing(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <Checkbox
+                  checked={todo.completed}
+                  onCheckedChange={(checked: CheckedState) => {
+                    onToggleComplete(todo.id);
+                  }}
+                />
+
+                <CardTitle className={todo.completed ? "line-through" : ""}>
+                  {todo.name}
+                </CardTitle>
+
+                <CardDescription>
+                  {formatDateForInput(todo.date)}
+                </CardDescription>
+              </>
+            )}
 
             <Button
               variant="ghost"

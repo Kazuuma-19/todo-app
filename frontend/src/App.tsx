@@ -20,15 +20,21 @@ function App() {
     console.log(id);
   };
 
-  const handleDelete = async (id: string) => {
-    console.log("delete", id);
+  const handleEdit = async (updates: {
+    id: string;
+    name: string;
+    date: string;
+  }) => {
+    await axios.put(`http://localhost:8080/todos/${updates.id}`, {
+      name: updates.name,
+      date: updates.date,
+    });
+    getTodos();
   };
 
-  const handleEdit = async (
-    id: string,
-    updates: { name: string; date: string },
-  ) => {
-    console.log("edit", id, updates);
+  const handleDelete = async (id: string) => {
+    await axios.delete(`http://localhost:8080/todos/${id}`);
+    getTodos();
   };
 
   return (
