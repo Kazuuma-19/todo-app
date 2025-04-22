@@ -90,93 +90,95 @@ export function TodoList({
   };
 
   return (
-    <div className="space-y-4">
-      {todos.map((todo) => (
-        <Card
-          key={todo.id}
-          className={`${
-            todo.completed ? "opacity-60" : ""
-          } cursor-pointer hover:bg-gray-50`}
-          onClick={() => handleEditClick(todo)}
-        >
-          <CardHeader className="flex items-center space-x-4">
-            {isEditing && editValues.id === todo.id ? (
-              <div className="flex-1 space-y-2">
-                <Input
-                  value={editValues.name}
-                  className="h-7"
-                  onChange={(e) =>
-                    setEditValues({ ...editValues, name: e.target.value })
-                  }
-                  onKeyDown={handleEditKeyDown}
-                  onClick={(e) => e.stopPropagation()}
-                  autoFocus
-                />
-                <Input
-                  type="date"
-                  value={editValues.date}
-                  className="h-7"
-                  onChange={(e) => {
-                    setEditValues({ ...editValues, date: e.target.value });
-                  }}
-                  onKeyDown={handleEditKeyDown}
-                  onClick={(e) => e.stopPropagation()}
-                />
-
-                <div className="flex items-center justify-end gap-2">
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEditSubmit();
+    <>
+      <div className="space-y-4 h-[calc(100vh-260px)] overflow-y-auto">
+        {todos.map((todo) => (
+          <Card
+            key={todo.id}
+            className={`${
+              todo.completed ? "opacity-60" : ""
+            } cursor-pointer hover:bg-gray-50`}
+            onClick={() => handleEditClick(todo)}
+          >
+            <CardHeader className="flex items-center space-x-4">
+              {isEditing && editValues.id === todo.id ? (
+                <div className="flex-1 space-y-2">
+                  <Input
+                    value={editValues.name}
+                    className="h-7"
+                    onChange={(e) =>
+                      setEditValues({ ...editValues, name: e.target.value })
+                    }
+                    onKeyDown={handleEditKeyDown}
+                    onClick={(e) => e.stopPropagation()}
+                    autoFocus
+                  />
+                  <Input
+                    type="date"
+                    value={editValues.date}
+                    className="h-7"
+                    onChange={(e) => {
+                      setEditValues({ ...editValues, date: e.target.value });
                     }}
-                  >
-                    Save
-                  </Button>
+                    onKeyDown={handleEditKeyDown}
+                    onClick={(e) => e.stopPropagation()}
+                  />
 
-                  <Button
-                    variant="outline"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsEditing(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                  <div className="flex items-center justify-end gap-2">
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditSubmit();
+                      }}
+                    >
+                      Save
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsEditing(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <>
-                <Checkbox
-                  checked={todo.completed}
-                  onCheckedChange={(checked) => {
-                    onToggleComplete(todo.id, Boolean(checked));
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                />
+              ) : (
+                <>
+                  <Checkbox
+                    checked={todo.completed}
+                    onCheckedChange={(checked) => {
+                      onToggleComplete(todo.id, Boolean(checked));
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  />
 
-                <CardTitle className={todo.completed ? "line-through" : ""}>
-                  {todo.name}
-                </CardTitle>
+                  <CardTitle className={todo.completed ? "line-through" : ""}>
+                    {todo.name}
+                  </CardTitle>
 
-                <CardDescription>
-                  {formatDateForInput(todo.date)}
-                </CardDescription>
-              </>
-            )}
+                  <CardDescription>
+                    {formatDateForInput(todo.date)}
+                  </CardDescription>
+                </>
+              )}
 
-            <Button
-              variant="ghost"
-              className="h-8 w-8 text-gray-500 hover:text-red-500"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(todo.id);
-              }}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </CardHeader>
-        </Card>
-      ))}
+              <Button
+                variant="ghost"
+                className="h-8 w-8 text-gray-500 hover:text-red-500"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(todo.id);
+                }}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
 
       {isCreating ? (
         <Card>
@@ -242,6 +244,6 @@ export function TodoList({
           <CardTitle>Add Task</CardTitle>
         </div>
       )}
-    </div>
+    </>
   );
 }
