@@ -1,7 +1,7 @@
 spring.application.name=todo-app
-# spring profile(local, prod)
-spring.profiles.active=your_profile
+
 # update table automatically based on Entity
 spring.jpa.hibernate.ddl-auto=update
+
 # using postgresql
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect

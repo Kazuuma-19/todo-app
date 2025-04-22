@@ -40,4 +40,5 @@ application.properties
 application-local.properties
 application-prod.properties
 
+.env.dev
 .env
