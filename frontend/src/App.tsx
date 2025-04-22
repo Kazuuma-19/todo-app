@@ -1,13 +1,8 @@
-import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-
-type Todo = {
-  id: string;
-  completed: boolean;
-  name: string;
-  date: string;
-};
+import Layout from "@/components/Layout";
+import { TodoList } from "@/components/TodoList";
+import type { Todo } from "@/types/todo";
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,17 +16,48 @@ function App() {
     getTodos();
   }, [getTodos]);
 
+  const handleToggleComplete = async (id: string, completed: boolean) => {
+    await axios.patch(`http://localhost:8080/todos/${id}/completed`, {
+      completed,
+    });
+    getTodos();
+  };
+
+  const handleEdit = async (updates: {
+    id: string;
+    name: string;
+    date: string;
+  }) => {
+    await axios.put(`http://localhost:8080/todos/${updates.id}`, {
+      name: updates.name,
+      date: updates.date,
+    });
+    getTodos();
+  };
+
+  const handleDelete = async (id: string) => {
+    await axios.delete(`http://localhost:8080/todos/${id}`);
+    getTodos();
+  };
+
+  const handleCreate = async (todo: { name: string; date: string }) => {
+    await axios.post("http://localhost:8080/todos", todo);
+    getTodos();
+  };
+
   return (
-    <>
-      <h1>Github Actions Test</h1>
-      {todos.map((todo) => (
-        <div key={todo.id}>
-          <h2>{todo.name}</h2>
-          <p>{todo.date}</p>
-        </div>
-      ))}
-      <Button>Click me</Button>
-    </>
+    <Layout>
+      <div className="max-w-4xl mx-auto">
+        <TodoList
+          todos={todos}
+          onToggleComplete={handleToggleComplete}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+          onCreate={handleCreate}
+        />
+      </div>
+    </Layout>
   );
 }
+
 export default App;
