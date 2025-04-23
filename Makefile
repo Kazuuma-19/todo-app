@@ -1,3 +1,9 @@
+help:
+	grep "^[a-zA-Z\-]*:" Makefile | grep -v "grep" | sed -e 's/^/make /' | sed -e 's/://'
+
+front:
+	cd frontend && npm run dev
+
 build:
 	cd backend && ./gradlew build
 
