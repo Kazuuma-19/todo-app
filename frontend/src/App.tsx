@@ -16,10 +16,8 @@ function App() {
     getTodos();
   }, [getTodos]);
 
-  const handleToggleComplete = async (id: string, completed: boolean) => {
-    await axios.patch(`http://localhost:8080/todos/${id}/completed`, {
-      completed,
-    });
+  const handleCreate = async (todo: { name: string; date: string }) => {
+    await axios.post("http://localhost:8080/todos", todo);
     getTodos();
   };
 
@@ -35,27 +33,27 @@ function App() {
     getTodos();
   };
 
+  const handleToggleComplete = async (id: string, completed: boolean) => {
+    await axios.patch(`http://localhost:8080/todos/${id}/completed`, {
+      completed,
+    });
+    getTodos();
+  };
+
   const handleDelete = async (id: string) => {
     await axios.delete(`http://localhost:8080/todos/${id}`);
     getTodos();
   };
 
-  const handleCreate = async (todo: { name: string; date: string }) => {
-    await axios.post("http://localhost:8080/todos", todo);
-    getTodos();
-  };
-
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto">
-        <TodoList
-          todos={todos}
-          onToggleComplete={handleToggleComplete}
-          onDelete={handleDelete}
-          onEdit={handleEdit}
-          onCreate={handleCreate}
-        />
-      </div>
+      <TodoList
+        todos={todos}
+        onCreate={handleCreate}
+        onEdit={handleEdit}
+        onToggleComplete={handleToggleComplete}
+        onDelete={handleDelete}
+      />
     </Layout>
   );
 }

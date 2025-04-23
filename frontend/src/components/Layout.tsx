@@ -14,7 +14,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       <SidebarInset className="px-6 py-4">
         <SidebarTrigger />
 
-        <div className="flex items-center justify-between mt-4 mb-6">
+        <div className="flex items-center justify-between my-4">
           <h1 className="text-2xl font-bold">Today</h1>
           <SearchBox />
         </div>

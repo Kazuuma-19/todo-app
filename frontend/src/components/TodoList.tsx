@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Trash2, Plus } from "lucide-react";
 import { useState } from "react";
 import type { Todo } from "@/types/todo";
-import { formatDateForInput } from "@/utils/formatDate";
+import { addTimeToDateString, formatDate } from "@/utils/formatDate";
 
 type TodoListProps = {
   todos: Todo[];
@@ -20,35 +20,58 @@ type TodoListProps = {
   onCreate: (todo: { name: string; date: string }) => void;
 };
 
+type EditValues = Omit<Todo, "completed">;
+type NewTodo = Omit<Todo, "id" | "completed">;
+
 export function TodoList({
   todos,
-  onToggleComplete,
-  onDelete,
-  onEdit,
   onCreate,
+  onToggleComplete,
+  onEdit,
+  onDelete,
 }: TodoListProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editValues, setEditValues] = useState<{
-    id: string;
-    name: string;
-    date: string;
-  }>({
+  const [editValues, setEditValues] = useState<EditValues>({
     id: "",
     name: "",
     date: "",
   });
   const [isCreating, setIsCreating] = useState<boolean>(false);
-  const [newTodo, setNewTodo] = useState<{ name: string; date: string }>({
+  const [newTodo, setNewTodo] = useState<NewTodo>({
     name: "",
-    date: formatDateForInput(new Date().toISOString()),
+    date: formatDate(new Date().toISOString()),
   });
 
+  const handleCreateSubmit = () => {
+    onCreate({
+      name: newTodo.name,
+      date: addTimeToDateString(newTodo.date),
+    });
+    setIsCreating(false);
+    setNewTodo({
+      name: "",
+      date: formatDate(new Date().toISOString()),
+    });
+  };
+
+  const handleCreateKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleCreateSubmit();
+    } else if (e.key === "Escape") {
+      setIsCreating(false);
+    }
+  };
+
   const handleEditClick = (todo: Todo) => {
+    if (todo.completed) {
+      return;
+    }
+
     setIsEditing(true);
     setEditValues({
       id: todo.id,
       name: todo.name,
-      date: formatDateForInput(todo.date),
+      date: formatDate(todo.date),
     });
   };
 
@@ -61,18 +84,6 @@ export function TodoList({
     setIsEditing(false);
   };
 
-  const handleCreateSubmit = () => {
-    onCreate({
-      name: newTodo.name,
-      date: `${newTodo.date}T00:00:00`,
-    });
-    setIsCreating(false);
-    setNewTodo({
-      name: "",
-      date: formatDateForInput(new Date().toISOString()),
-    });
-  };
-
   const handleEditKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       handleEditSubmit();
@@ -81,26 +92,18 @@ export function TodoList({
     }
   };
 
-  const handleCreateKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleCreateSubmit();
-    } else if (e.key === "Escape") {
-      setIsCreating(false);
-    }
-  };
-
   return (
-    <>
-      <div className="space-y-4 h-[calc(100vh-260px)] overflow-y-auto">
+    <div className="max-w-4xl mx-auto">
+      <div className="h-[calc(100vh-220px)] overflow-y-auto space-y-4 ">
         {todos.map((todo) => (
           <Card
             key={todo.id}
-            className={`${
-              todo.completed ? "opacity-60" : ""
-            } cursor-pointer hover:bg-gray-50`}
+            className={
+              todo.completed ? "opacity-60" : "cursor-pointer hover:bg-gray-50"
+            }
             onClick={() => handleEditClick(todo)}
           >
-            <CardHeader className="flex items-center space-x-4">
+            <CardHeader className="flex items-center justify-between space-x-4">
               {isEditing && editValues.id === todo.id ? (
                 <div className="flex-1 space-y-2">
                   <Input
@@ -146,7 +149,7 @@ export function TodoList({
                   </div>
                 </div>
               ) : (
-                <>
+                <div className="flex items-center space-x-4">
                   <Checkbox
                     checked={todo.completed}
                     onCheckedChange={(checked) => {
@@ -155,14 +158,14 @@ export function TodoList({
                     onClick={(e) => e.stopPropagation()}
                   />
 
-                  <CardTitle className={todo.completed ? "line-through" : ""}>
-                    {todo.name}
-                  </CardTitle>
+                  <div>
+                    <CardTitle className={todo.completed ? "line-through" : ""}>
+                      {todo.name}
+                    </CardTitle>
 
-                  <CardDescription>
-                    {formatDateForInput(todo.date)}
-                  </CardDescription>
-                </>
+                    <CardDescription>{formatDate(todo.date)}</CardDescription>
+                  </div>
+                </div>
               )}
 
               <Button
@@ -182,7 +185,7 @@ export function TodoList({
 
       {isCreating ? (
         <Card>
-          <CardHeader className="flex items-center space-x-4">
+          <CardHeader className="flex items-center">
             <div className="flex-1 space-y-2">
               <Input
                 value={newTodo.name}
@@ -231,7 +234,7 @@ export function TodoList({
         </Card>
       ) : (
         <div
-          className="flex items-center space-x-2 my-6 p-4 rounded-lg cursor-pointer hover:bg-gray-50"
+          className="flex items-center space-x-2 mt-4 p-4 rounded-lg cursor-pointer hover:bg-gray-50"
           onClick={() => setIsCreating(true)}
           onKeyDown={(e) => {
             // TODO: 設定する
@@ -244,6 +247,6 @@ export function TodoList({
           <CardTitle>Add Task</CardTitle>
         </div>
       )}
-    </>
+    </div>
   );
 }
