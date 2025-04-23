@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { TodoList } from "@/components/TodoList";
 import type { Todo } from "@/types/todo";
+import SearchBox from "./components/SearchBox";
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -47,6 +48,11 @@ function App() {
 
   return (
     <Layout>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Today</h1>
+        <SearchBox />
+      </div>
+
       <TodoList
         todos={todos}
         onCreate={handleCreate}

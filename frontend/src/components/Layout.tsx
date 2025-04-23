@@ -4,7 +4,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import SearchBox from "./SearchBox";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,12 +13,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       <SidebarInset className="px-6 py-4">
         <SidebarTrigger />
 
-        <div className="flex items-center justify-between my-4">
-          <h1 className="text-2xl font-bold">Today</h1>
-          <SearchBox />
-        </div>
-
-        <div>{children}</div>
+        <div className="max-w-4xl mx-auto w-full my-4">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
