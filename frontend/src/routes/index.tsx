@@ -3,6 +3,7 @@ import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { TodoList } from "@/components/TodoList";
 import type { Todo } from "@/types/todo";
+import SearchBox from "@/components/SearchBox";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -50,12 +51,19 @@ function Index() {
   };
 
   return (
-    <TodoList
-      todos={todos}
-      onCreate={handleCreate}
-      onEdit={handleEdit}
-      onToggleComplete={handleToggleComplete}
-      onDelete={handleDelete}
-    />
+    <>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Today</h1>
+        <SearchBox />
+      </div>
+
+      <TodoList
+        todos={todos}
+        onCreate={handleCreate}
+        onEdit={handleEdit}
+        onToggleComplete={handleToggleComplete}
+        onDelete={handleDelete}
+      />
+    </>
   );
 }

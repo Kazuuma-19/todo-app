@@ -10,104 +10,104 @@
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root";
-import { Route as SettingsImport } from "./routes/settings";
-import { Route as InboxImport } from "./routes/inbox";
-import { Route as IndexImport } from "./routes/index";
+import { Route as rootRoute } from './routes/__root'
+import { Route as IndexImport } from './routes/index'
+import { Route as SettingsIndexImport } from './routes/settings/index'
+import { Route as InboxIndexImport } from './routes/inbox/index'
 
 // Create/Update Routes
 
-const SettingsRoute = SettingsImport.update({
-  id: "/settings",
-  path: "/settings",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const InboxRoute = InboxImport.update({
-  id: "/inbox",
-  path: "/inbox",
-  getParentRoute: () => rootRoute,
-} as any);
-
 const IndexRoute = IndexImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
+
+const SettingsIndexRoute = SettingsIndexImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const InboxIndexRoute = InboxIndexImport.update({
+  id: '/inbox/',
+  path: '/inbox/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/inbox": {
-      id: "/inbox";
-      path: "/inbox";
-      fullPath: "/inbox";
-      preLoaderRoute: typeof InboxImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/settings": {
-      id: "/settings";
-      path: "/settings";
-      fullPath: "/settings";
-      preLoaderRoute: typeof SettingsImport;
-      parentRoute: typeof rootRoute;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/inbox/': {
+      id: '/inbox/'
+      path: '/inbox'
+      fullPath: '/inbox'
+      preLoaderRoute: typeof InboxIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/inbox": typeof InboxRoute;
-  "/settings": typeof SettingsRoute;
+  '/': typeof IndexRoute
+  '/inbox': typeof InboxIndexRoute
+  '/settings': typeof SettingsIndexRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/inbox": typeof InboxRoute;
-  "/settings": typeof SettingsRoute;
+  '/': typeof IndexRoute
+  '/inbox': typeof InboxIndexRoute
+  '/settings': typeof SettingsIndexRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  "/": typeof IndexRoute;
-  "/inbox": typeof InboxRoute;
-  "/settings": typeof SettingsRoute;
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/inbox/': typeof InboxIndexRoute
+  '/settings/': typeof SettingsIndexRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/inbox" | "/settings";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/inbox" | "/settings";
-  id: "__root__" | "/" | "/inbox" | "/settings";
-  fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/inbox' | '/settings'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/inbox' | '/settings'
+  id: '__root__' | '/' | '/inbox/' | '/settings/'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  InboxRoute: typeof InboxRoute;
-  SettingsRoute: typeof SettingsRoute;
+  IndexRoute: typeof IndexRoute
+  InboxIndexRoute: typeof InboxIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  InboxRoute: InboxRoute,
-  SettingsRoute: SettingsRoute,
-};
+  InboxIndexRoute: InboxIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -116,18 +116,18 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/inbox",
-        "/settings"
+        "/inbox/",
+        "/settings/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/inbox": {
-      "filePath": "inbox.tsx"
+    "/inbox/": {
+      "filePath": "inbox/index.tsx"
     },
-    "/settings": {
-      "filePath": "settings.tsx"
+    "/settings/": {
+      "filePath": "settings/index.tsx"
     }
   }
 }
