@@ -1,11 +1,14 @@
+import { createFileRoute } from "@tanstack/react-router";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import Layout from "@/components/Layout";
 import { TodoList } from "@/components/TodoList";
 import type { Todo } from "@/types/todo";
-import SearchBox from "./components/SearchBox";
 
-function App() {
+export const Route = createFileRoute("/")({
+  component: Index,
+});
+
+function Index() {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const getTodos = useCallback(async () => {
@@ -47,21 +50,12 @@ function App() {
   };
 
   return (
-    <Layout>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Today</h1>
-        <SearchBox />
-      </div>
-
-      <TodoList
-        todos={todos}
-        onCreate={handleCreate}
-        onEdit={handleEdit}
-        onToggleComplete={handleToggleComplete}
-        onDelete={handleDelete}
-      />
-    </Layout>
+    <TodoList
+      todos={todos}
+      onCreate={handleCreate}
+      onEdit={handleEdit}
+      onToggleComplete={handleToggleComplete}
+      onDelete={handleDelete}
+    />
   );
 }
-
-export default App;

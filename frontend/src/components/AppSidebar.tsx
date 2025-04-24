@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Calendar1, Inbox, Settings } from "lucide-react";
 import {
   Sidebar,
@@ -14,17 +15,17 @@ import {
 const items = [
   {
     title: "Today",
-    url: "#",
+    url: "/",
     icon: Calendar1,
   },
   {
     title: "Inbox",
-    url: "#",
+    url: "/inbox",
     icon: Inbox,
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/settings",
     icon: Settings,
   },
 ];
@@ -45,10 +46,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
