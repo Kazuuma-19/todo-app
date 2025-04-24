@@ -9,11 +9,13 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const apiUrl = `${import.meta.env.VITE_BACKEND_API_URL}/todos`;
+
 function Index() {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const getTodos = useCallback(async () => {
-    const response = await axios.get("http://localhost:8080/todos");
+    const response = await axios.get(apiUrl);
     setTodos(response.data);
   }, []);
 
@@ -22,7 +24,7 @@ function Index() {
   }, [getTodos]);
 
   const handleCreate = async (todo: { name: string; date: string }) => {
-    await axios.post("http://localhost:8080/todos", todo);
+    await axios.post(apiUrl, todo);
     getTodos();
   };
 
@@ -31,7 +33,7 @@ function Index() {
     name: string;
     date: string;
   }) => {
-    await axios.put(`http://localhost:8080/todos/${updates.id}`, {
+    await axios.put(`${apiUrl}/${updates.id}`, {
       name: updates.name,
       date: updates.date,
     });
@@ -39,14 +41,14 @@ function Index() {
   };
 
   const handleToggleComplete = async (id: string, completed: boolean) => {
-    await axios.patch(`http://localhost:8080/todos/${id}/completed`, {
+    await axios.patch(`${apiUrl}/${id}/completed`, {
       completed,
     });
     getTodos();
   };
 
   const handleDelete = async (id: string) => {
-    await axios.delete(`http://localhost:8080/todos/${id}`);
+    await axios.delete(`${apiUrl}/${id}`);
     getTodos();
   };
 

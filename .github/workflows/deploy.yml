@@ -25,6 +25,10 @@ jobs:
       - name: Install dependencies
         run: npm install  # 必要な依存パッケージをインストール
 
+      - name: Create .env file
+        run: echo "${{ secrets.FRONT_ENV_FILE }}" > frontend/.env
+        working-directory: frontend
+
       - name: Build React app
         run: npm run build  # Reactアプリをビルド
 
