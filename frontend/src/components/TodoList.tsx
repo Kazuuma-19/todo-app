@@ -7,9 +7,9 @@ import { useState } from "react";
 import type { Todo } from "@/types/todo";
 import { addTimeToDateString, formatDate } from "@/utils/formatDate";
 import { cn } from "@/lib/utils";
-
+import { todosAtom } from "@/stores/todoAtom";
+import { useAtomValue } from "jotai";
 type TodoListProps = {
-  todos: Todo[];
   onToggleComplete: (id: string, completed: boolean) => void;
   onDelete: (id: string) => void;
   onEdit: (updates: { id: string; name: string; date: string }) => void;
@@ -20,12 +20,12 @@ type EditValues = Omit<Todo, "completed">;
 type NewTodo = Omit<Todo, "id" | "completed">;
 
 export function TodoList({
-  todos,
   onCreate,
   onToggleComplete,
   onEdit,
   onDelete,
 }: TodoListProps) {
+  const todos = useAtomValue(todosAtom);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editValues, setEditValues] = useState<EditValues>({
     id: "",

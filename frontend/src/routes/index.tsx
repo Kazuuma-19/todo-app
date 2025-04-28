@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { TodoList } from "@/components/TodoList";
-import type { Todo } from "@/types/todo";
 import SearchBox from "@/components/SearchBox";
+import { todosAtom } from "@/stores/todoAtom";
+import { useSetAtom } from "jotai";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -12,12 +13,12 @@ export const Route = createFileRoute("/")({
 const apiUrl = `${import.meta.env.VITE_BACKEND_API_URL}/todos`;
 
 function Index() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const setTodos = useSetAtom(todosAtom);
 
   const getTodos = useCallback(async () => {
     const response = await axios.get(apiUrl);
     setTodos(response.data);
-  }, []);
+  }, [setTodos]);
 
   useEffect(() => {
     getTodos();
@@ -60,7 +61,6 @@ function Index() {
       </div>
 
       <TodoList
-        todos={todos}
         onCreate={handleCreate}
         onEdit={handleEdit}
         onToggleComplete={handleToggleComplete}
