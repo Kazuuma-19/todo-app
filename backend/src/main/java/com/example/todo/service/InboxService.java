@@ -9,20 +9,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
-public class TodoService {
+@Service
+public class InboxService {
     private final TodoRepository todoRepository;
 
     public List<Todo> getTodos() {
-        LocalDate today = LocalDate.now();
-        LocalDateTime startOfToday = today.atStartOfDay(); // 2025-04-01T00:00:00
-        LocalDateTime startOfTomorrow = today.plusDays(1).atStartOfDay(); // 2025-04-02T00:00:00
-        return todoRepository.findAllByDateToday(startOfToday, startOfTomorrow);
+        return todoRepository.findAllByOrderByCompletedAscDateAsc();
     }
 
     public void createTodo(TodoRequest request) {

@@ -7,7 +7,7 @@ import { useState } from "react";
 import type { Todo } from "@/types/todo";
 import { addTimeToDateString, formatDate } from "@/utils/formatDate";
 import { cn } from "@/lib/utils";
-import { todosAtom } from "@/stores/todoAtom";
+import { inboxTodosAtom } from "@/stores/todoAtom";
 import { useAtomValue } from "jotai";
 
 type TodoListProps = {
@@ -20,13 +20,13 @@ type TodoListProps = {
 type EditValues = Omit<Todo, "completed">;
 type NewTodo = Omit<Todo, "id" | "completed">;
 
-export function TodoList({
+export function InboxList({
   onCreate,
   onToggleComplete,
   onEdit,
   onDelete,
 }: TodoListProps) {
-  const todos = useAtomValue(todosAtom);
+  const todos = useAtomValue(inboxTodosAtom);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editValues, setEditValues] = useState<EditValues>({
     id: "",
