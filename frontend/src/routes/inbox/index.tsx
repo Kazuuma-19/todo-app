@@ -1,10 +1,11 @@
-import { InboxList } from "@/components/InboxList";
-import SearchBox from "@/components/SearchBox";
+import InboxList from "@/features/inbox/InboxList";
 import { inboxTodosAtom } from "@/stores/todoAtom";
 import { createFileRoute } from "@tanstack/react-router";
 import axios from "axios";
 import { useSetAtom } from "jotai";
 import { useCallback, useEffect } from "react";
+
+import SearchBox from "@/components/SearchBox";
 
 export const Route = createFileRoute("/inbox/")({
   component: InboxIndex,

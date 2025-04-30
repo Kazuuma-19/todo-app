@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import axios from "axios";
 import { useCallback, useEffect } from "react";
-import { TodoList } from "@/components/TodoList";
-import SearchBox from "@/components/SearchBox";
+import { TodoList } from "@/features/today/TodoList";
 import { todosAtom } from "@/stores/todoAtom";
 import { useSetAtom } from "jotai";
+
+import SearchBox from "@/components/SearchBox";
 
 export const Route = createFileRoute("/")({
   component: Index,
