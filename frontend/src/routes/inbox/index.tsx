@@ -1,6 +1,5 @@
 import { InboxList } from "@/features/inbox/InboxList";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
 import { useInboxTodos } from "@/features/inbox/hooks/useInboxTodos";
 
 import { SearchBox } from "@/components/SearchBox";
