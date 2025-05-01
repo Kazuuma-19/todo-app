@@ -1,5 +1,4 @@
-import { useAtomValue } from "jotai";
-import { inboxTodosAtom } from "@/stores/todoAtom";
+import { useInboxSwr } from "./hooks/useInboxSwr";
 
 import { CreateCard } from "@/components/CreateCard";
 import { EditCard } from "@/components/EditCard";
@@ -17,7 +16,7 @@ export function InboxList({
   onEdit,
   onDelete,
 }: TodoListProps) {
-  const todos = useAtomValue(inboxTodosAtom);
+  const { todos } = useInboxSwr();
 
   return (
     <>
