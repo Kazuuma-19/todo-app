@@ -10,17 +10,8 @@ export const Route = createFileRoute("/inbox/")({
 });
 
 function InboxIndex() {
-  const {
-    getTodos,
-    handleCreate,
-    handleEdit,
-    handleToggleComplete,
-    handleDelete,
-  } = useInboxTodos();
-
-  useEffect(() => {
-    getTodos();
-  }, [getTodos]);
+  const { handleCreate, handleEdit, handleToggleComplete, handleDelete } =
+    useInboxTodos();
 
   return (
     <>

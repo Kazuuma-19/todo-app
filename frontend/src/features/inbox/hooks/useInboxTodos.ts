@@ -1,25 +1,17 @@
-import { useCallback } from "react";
-import { useSetAtom } from "jotai";
-import { inboxTodosAtom } from "@/stores/todoAtom";
 import {
-  fetchTodos,
   createTodo,
   updateTodo,
   toggleTodoCompleted,
   deleteTodo,
 } from "@/features/inbox/api/inboxTodoApi";
+import { useInboxSwr } from "./useInboxSwr";
 
 export function useInboxTodos() {
-  const setTodos = useSetAtom(inboxTodosAtom);
-
-  const getTodos = useCallback(async () => {
-    const todos = await fetchTodos();
-    setTodos(todos);
-  }, [setTodos]);
+  const { mutate } = useInboxSwr();
 
   const handleCreate = async (todo: { name: string; date: string }) => {
     await createTodo(todo);
-    getTodos();
+    mutate();
   };
 
   const handleEdit = async (updates: {
@@ -28,21 +20,20 @@ export function useInboxTodos() {
     date: string;
   }) => {
     await updateTodo(updates);
-    getTodos();
+    mutate();
   };
 
   const handleToggleComplete = async (id: string, completed: boolean) => {
     await toggleTodoCompleted(id, completed);
-    getTodos();
+    mutate();
   };
 
   const handleDelete = async (id: string) => {
     await deleteTodo(id);
-    getTodos();
+    mutate();
   };
 
   return {
-    getTodos,
     handleCreate,
     handleEdit,
     handleToggleComplete,

@@ -10,7 +10,7 @@ import { DeleteButton } from "./DeleteButton";
 
 type EditValues = Omit<Todo, "completed">;
 type EditCardProps = {
-  todos: Todo[];
+  todos?: Todo[];
   onToggleComplete: (id: string, completed: boolean) => void;
   onEdit: (updates: EditValues) => void;
   onDelete: (id: string) => void;
@@ -60,7 +60,7 @@ export function EditCard({
 
   return (
     <>
-      {todos.map((todo) => (
+      {todos?.map((todo) => (
         <div
           key={todo.id}
           className={cn(

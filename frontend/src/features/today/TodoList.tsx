@@ -1,8 +1,6 @@
-import { useAtomValue } from "jotai";
-import { todosAtom } from "@/stores/todoAtom";
-
 import { CreateCard } from "@/components/CreateCard";
 import { EditCard } from "@/components/EditCard";
+import { useTodaySwr } from "./hooks/useTodaySwr";
 
 type TodoListProps = {
   onCreate: (todo: { name: string; date: string }) => void;
@@ -17,7 +15,7 @@ export function TodoList({
   onEdit,
   onDelete,
 }: TodoListProps) {
-  const todos = useAtomValue(todosAtom);
+  const { todos } = useTodaySwr();
 
   return (
     <>
