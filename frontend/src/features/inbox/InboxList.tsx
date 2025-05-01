@@ -11,7 +11,7 @@ type TodoListProps = {
   onDelete: (id: string) => void;
 };
 
-function InboxList({
+export function InboxList({
   onCreate,
   onToggleComplete,
   onEdit,
@@ -32,5 +32,3 @@ function InboxList({
     </>
   );
 }
-
-export default InboxList;

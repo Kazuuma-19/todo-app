@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 
-function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -18,5 +18,3 @@ function Layout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   );
 }
-
-export default Layout;

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { TodoList } from "@/features/today/TodoList";
 import { useTodos } from "@/features/today/hooks/useTodos";
 
-import SearchBox from "@/components/SearchBox";
+import { SearchBox } from "@/components/SearchBox";
 
 export const Route = createFileRoute("/")({
   component: Index,

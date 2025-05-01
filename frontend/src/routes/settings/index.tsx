@@ -1,4 +1,4 @@
-import SearchBox from "@/components/SearchBox";
+import { SearchBox } from "@/components/SearchBox";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/settings/")({
