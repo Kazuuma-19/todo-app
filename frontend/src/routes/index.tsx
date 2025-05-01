@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { TodoList } from "@/features/today/TodoList";
+import { useTodos } from "@/features/today/hooks/useTodos";
 
 import SearchBox from "@/components/SearchBox";
-import { useTodos } from "@/features/today/hooks/useTodos";
 
 export const Route = createFileRoute("/")({
   component: Index,

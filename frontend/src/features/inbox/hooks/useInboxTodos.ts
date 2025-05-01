@@ -1,16 +1,16 @@
 import { useCallback } from "react";
 import { useSetAtom } from "jotai";
-import { todosAtom } from "@/stores/todoAtom";
+import { inboxTodosAtom } from "@/stores/todoAtom";
 import {
   fetchTodos,
   createTodo,
   updateTodo,
   toggleTodoCompleted,
   deleteTodo,
-} from "@/features/today/api/todayTodoApi";
+} from "@/features/inbox/api/inboxTodoApi";
 
-export function useTodos() {
-  const setTodos = useSetAtom(todosAtom);
+export function useInboxTodos() {
+  const setTodos = useSetAtom(inboxTodosAtom);
 
   const getTodos = useCallback(async () => {
     const todos = await fetchTodos();
