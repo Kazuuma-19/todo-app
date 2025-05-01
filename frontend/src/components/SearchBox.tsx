@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import { Input } from "./ui/input";
 
-function SearchBox() {
+export function SearchBox() {
   return (
     <div className="relative w-full max-w-sm">
       <Search className=" h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -9,5 +9,3 @@ function SearchBox() {
     </div>
   );
 }
-
-export default SearchBox;
