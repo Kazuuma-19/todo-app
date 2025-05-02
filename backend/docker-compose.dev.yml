@@ -11,6 +11,9 @@ services:
       - "8080:8080"
     depends_on:
       - db
+    volumes:
+    - .:/app  # カレントディレクトリ (= backend) を /app にマウント
+    - ~/.gradle:/home/gradle/.gradle
 
   db:
     image: postgres:14
