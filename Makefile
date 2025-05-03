@@ -17,6 +17,9 @@ build-up:
 down:
 	docker compose -f backend/docker-compose.dev.yml down
 
+down-v:
+	docker compose -f backend/docker-compose.dev.yml down -v
+
 # コンテナ内に入る
 exec:
 	docker compose -f backend/docker-compose.dev.yml exec app sh
