@@ -1,5 +1,6 @@
 package com.example.todo.controller;
 
+import com.example.todo.dto.LoginRequest;
 import com.example.todo.dto.RegisterRequest;
 import com.example.todo.model.User;
 import com.example.todo.service.UserService;
@@ -27,6 +28,16 @@ public class UserController {
         try {
             userService.registerUser(request);
             return ResponseEntity.ok("ユーザーが作成されました。");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+        try {
+            String token = userService.login(request);
+            return ResponseEntity.ok(token);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
