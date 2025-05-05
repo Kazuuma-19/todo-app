@@ -27,4 +27,14 @@ public class JwtService {
                 .signWith(key)
                 .compact();
     }
+
+    public String extractEmail(String token) {
+        SecretKey key = getSecretKey();
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
 }
