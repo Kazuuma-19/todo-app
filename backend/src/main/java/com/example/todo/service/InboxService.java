@@ -3,6 +3,7 @@ package com.example.todo.service;
 import com.example.todo.dto.TodoCompletionRequest;
 import com.example.todo.dto.TodoRequest;
 import com.example.todo.model.Todo;
+import com.example.todo.model.User;
 import com.example.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,23 +18,34 @@ import java.util.List;
 public class InboxService {
     private final TodoRepository todoRepository;
 
-    public List<Todo> getTodos() {
-        return todoRepository.findAllByOrderByCompletedAscDateAsc();
+    private Todo findAndCheckOwner(Long id, User user) {
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
+
+        if (!todo.getUser().getId().equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your todo");
+        }
+
+        return todo;
     }
 
-    public void createTodo(TodoRequest request) {
+    public List<Todo> getTodos(User user) {
+        return todoRepository.findByUserOrderByCompletedAscDateAsc(user);
+    }
+
+    public void createTodo(TodoRequest request, User user) {
         Todo todo = new Todo();
         todo.setName(request.getName());
         todo.setCompleted(false);
         if (request.getDate() != null) {
             todo.setDate(LocalDateTime.parse(request.getDate()));
         }
+        todo.setUser(user);
         todoRepository.save(todo);
     }
 
-    public void updateTodo(Long id, TodoRequest request) {
-        Todo existingTodo = todoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
+    public void updateTodo(Long id, TodoRequest request, User user) {
+        Todo existingTodo = findAndCheckOwner(id, user);
 
         existingTodo.setName(request.getName());
         if (request.getDate() != null) {
@@ -43,15 +55,14 @@ public class InboxService {
         todoRepository.save(existingTodo);
     }
 
-    public void updateCompleted(Long id, TodoCompletionRequest request) {
-        Todo existingTodo = todoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
-
+    public void updateCompleted(Long id, TodoCompletionRequest request, User user) {
+        Todo existingTodo = findAndCheckOwner(id, user);
         existingTodo.setCompleted(request.getCompleted());
         todoRepository.save(existingTodo);
     }
 
-    public void deleteTodo(Long id) {
-        todoRepository.deleteById(id);
+    public void deleteTodo(Long id, User user) {
+        Todo existingTodo = findAndCheckOwner(id, user);
+        todoRepository.delete(existingTodo);
     }
 }
