@@ -5,3 +5,6 @@ spring.jpa.hibernate.ddl-auto=update
 
 # using postgresql
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+# read from env file
+jwt.secret=${JWT_SECRET}
