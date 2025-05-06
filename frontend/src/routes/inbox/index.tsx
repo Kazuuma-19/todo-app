@@ -3,8 +3,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useInboxTodos } from "@/features/inbox/hooks/useInboxTodos";
 
 import { SearchBox } from "@/components/SearchBox";
+import { requireAuth } from "@/lib/requireAuth";
 
 export const Route = createFileRoute("/inbox/")({
+  beforeLoad: () => {
+    requireAuth();
+  },
   component: InboxIndex,
 });
 

@@ -1,7 +1,11 @@
 import { SearchBox } from "@/components/SearchBox";
+import { requireAuth } from "@/lib/requireAuth";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/settings/")({
+  beforeLoad: () => {
+    requireAuth();
+  },
   component: SettingsIndex,
 });
 
