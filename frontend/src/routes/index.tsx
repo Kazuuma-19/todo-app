@@ -6,8 +6,8 @@ import { SearchBox } from "@/components/SearchBox";
 import { requireAuth } from "@/lib/requireAuth";
 
 export const Route = createFileRoute("/")({
-  beforeLoad: () => {
-    requireAuth();
+  beforeLoad: async () => {
+    await requireAuth();
   },
   component: Index,
 });

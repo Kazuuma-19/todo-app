@@ -1,20 +1,30 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import {
+  createRootRoute,
+  Outlet,
+  useRouterState,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import { Layout } from "@/components/Layout";
-import { useAuthInit } from "@/hooks/useAuthInit";
 
 export const Route = createRootRoute({
   component: RootComponent,
 });
 
 function RootComponent() {
-  useAuthInit();
+  const location = useRouterState({ select: (s) => s.location.pathname });
+
+  const isLoginPage = location === "/login";
+
   return (
     <>
-      <Layout>
+      {isLoginPage ? (
         <Outlet />
-      </Layout>
+      ) : (
+        <Layout>
+          <Outlet />
+        </Layout>
+      )}
 
       <TanStackRouterDevtools />
     </>

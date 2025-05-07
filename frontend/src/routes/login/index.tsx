@@ -20,7 +20,6 @@ function LoginIndex() {
     e.preventDefault();
     try {
       const res = await axiosInstance.post("/login", { email, password });
-      console.log("/login api: ", res.data);
       localStorage.setItem("token", res.data);
       navigate({ to: "/", replace: true }); // replace: ブラウザバックを無効化
     } catch (err) {
@@ -30,7 +29,7 @@ function LoginIndex() {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto p-6">
+    <Card className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-8">
       <CardHeader>
         <CardTitle className="text-center text-2xl">ログイン</CardTitle>
       </CardHeader>
