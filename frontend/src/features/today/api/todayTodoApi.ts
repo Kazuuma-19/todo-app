@@ -1,15 +1,15 @@
+import { axiosInstance } from "@/lib/axios";
 import type { Todo } from "@/types/todo";
-import axios from "axios";
 
 const apiUrl = `${import.meta.env.VITE_BACKEND_API_URL}/todos`;
 
 export const fetchTodos = async (): Promise<Todo[]> => {
-  const response = await axios.get(apiUrl);
+  const response = await axiosInstance.get(apiUrl);
   return response.data;
 };
 
 export const createTodo = async (todo: { name: string; date: string }) => {
-  await axios.post(apiUrl, todo);
+  await axiosInstance.post(apiUrl, todo);
 };
 
 export const updateTodo = async (updates: {
@@ -17,16 +17,16 @@ export const updateTodo = async (updates: {
   name: string;
   date: string;
 }) => {
-  await axios.put(`${apiUrl}/${updates.id}`, {
+  await axiosInstance.put(`${apiUrl}/${updates.id}`, {
     name: updates.name,
     date: updates.date,
   });
 };
 
 export const toggleTodoCompleted = async (id: string, completed: boolean) => {
-  await axios.patch(`${apiUrl}/${id}/completed`, { completed });
+  await axiosInstance.patch(`${apiUrl}/${id}/completed`, { completed });
 };
 
 export const deleteTodo = async (id: string) => {
-  await axios.delete(`${apiUrl}/${id}`);
+  await axiosInstance.delete(`${apiUrl}/${id}`);
 };
