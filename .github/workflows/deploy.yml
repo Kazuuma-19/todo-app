@@ -7,6 +7,7 @@ on:
 
 jobs:
   frontend:
+    name: Deploy React App to S3
     runs-on: ubuntu-latest  # GitHub Actionsの実行環境（最新のUbuntu）
 
     defaults:
