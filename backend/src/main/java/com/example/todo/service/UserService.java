@@ -8,18 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-
-    public List<User> getUsers() {
-        return userRepository.findAll();
-    }
 
     public void registerUser(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {

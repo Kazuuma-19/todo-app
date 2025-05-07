@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -22,9 +21,18 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/users")
-    public List<User> getUser() {
-        return userService.getUsers();
+    @GetMapping("/me")
+    public ResponseEntity<Map<String, Object>> getMe(@AuthenticationPrincipal User user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("id", user.getId());
+        userInfo.put("name", user.getName());
+        userInfo.put("email", user.getEmail());
+
+        return ResponseEntity.ok(userInfo);
     }
 
     @PostMapping("/register")
@@ -45,19 +53,5 @@ public class UserController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    @GetMapping("/me")
-    public ResponseEntity<Map<String, Object>> getMe(@AuthenticationPrincipal User user) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("id", user.getId());
-        userInfo.put("name", user.getName());
-        userInfo.put("email", user.getEmail());
-
-        return ResponseEntity.ok(userInfo);
     }
 }
