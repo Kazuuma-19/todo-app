@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as SettingsIndexImport } from './routes/settings/index'
+import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as InboxIndexImport } from './routes/inbox/index'
 
 // Create/Update Routes
@@ -26,6 +27,12 @@ const IndexRoute = IndexImport.update({
 const SettingsIndexRoute = SettingsIndexImport.update({
   id: '/settings/',
   path: '/settings/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginIndexRoute = LoginIndexImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,6 +60,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InboxIndexImport
       parentRoute: typeof rootRoute
     }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/settings/': {
       id: '/settings/'
       path: '/settings'
@@ -68,12 +82,14 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/inbox': typeof InboxIndexRoute
+  '/login': typeof LoginIndexRoute
   '/settings': typeof SettingsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/inbox': typeof InboxIndexRoute
+  '/login': typeof LoginIndexRoute
   '/settings': typeof SettingsIndexRoute
 }
 
@@ -81,27 +97,30 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/inbox/': typeof InboxIndexRoute
+  '/login/': typeof LoginIndexRoute
   '/settings/': typeof SettingsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/inbox' | '/settings'
+  fullPaths: '/' | '/inbox' | '/login' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/inbox' | '/settings'
-  id: '__root__' | '/' | '/inbox/' | '/settings/'
+  to: '/' | '/inbox' | '/login' | '/settings'
+  id: '__root__' | '/' | '/inbox/' | '/login/' | '/settings/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   InboxIndexRoute: typeof InboxIndexRoute
+  LoginIndexRoute: typeof LoginIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   InboxIndexRoute: InboxIndexRoute,
+  LoginIndexRoute: LoginIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
 }
 
@@ -117,6 +136,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/inbox/",
+        "/login/",
         "/settings/"
       ]
     },
@@ -125,6 +145,9 @@ export const routeTree = rootRoute
     },
     "/inbox/": {
       "filePath": "inbox/index.tsx"
+    },
+    "/login/": {
+      "filePath": "login/index.tsx"
     },
     "/settings/": {
       "filePath": "settings/index.tsx"

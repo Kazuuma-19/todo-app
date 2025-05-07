@@ -3,8 +3,12 @@ import { TodoList } from "@/features/today/TodoList";
 import { useTodayTodos } from "@/features/today/hooks/useTodayTodos";
 
 import { SearchBox } from "@/components/SearchBox";
+import { requireAuth } from "@/lib/requireAuth";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: async () => {
+    await requireAuth();
+  },
   component: Index,
 });
 
