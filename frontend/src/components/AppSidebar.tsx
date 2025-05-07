@@ -10,6 +10,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useAtomValue } from "jotai";
+import { authUserAtom } from "@/stores/authAtom";
 
 // Menu items.
 const items = [
@@ -31,11 +33,12 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const user = useAtomValue(authUserAtom);
   return (
     <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center justify-between">
-          <span>Login Name</span>
+        <div className="flex items-center justify-between font-bold">
+          <span>{user?.name}</span>
         </div>
       </SidebarHeader>
 

@@ -13,7 +13,6 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   const location = useRouterState({ select: (s) => s.location.pathname });
-
   const isLoginPage = location === "/login";
 
   return (
