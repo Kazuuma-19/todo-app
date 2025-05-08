@@ -4,6 +4,8 @@ import com.example.todo.dto.LoginRequest;
 import com.example.todo.dto.RegisterRequest;
 import com.example.todo.model.User;
 import com.example.todo.service.UserService;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,45 +15,42 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-    private final UserService userService;
+  private final UserService userService;
 
-    @GetMapping("/me")
-    public ResponseEntity<Map<String, Object>> getMe(@AuthenticationPrincipal User user) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("id", user.getId());
-        userInfo.put("name", user.getName());
-        userInfo.put("email", user.getEmail());
-
-        return ResponseEntity.ok(userInfo);
+  @GetMapping("/me")
+  public ResponseEntity<Map<String, Object>> getMe(@AuthenticationPrincipal User user) {
+    if (user == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request) {
-        try {
-            userService.registerUser(request);
-            return ResponseEntity.ok("ユーザーが作成されました。");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+    Map<String, Object> userInfo = new HashMap<>();
+    userInfo.put("id", user.getId());
+    userInfo.put("name", user.getName());
+    userInfo.put("email", user.getEmail());
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
-        try {
-            String token = userService.login(request);
-            return ResponseEntity.ok(token);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    return ResponseEntity.ok(userInfo);
+  }
+
+  @PostMapping("/register")
+  public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request) {
+    try {
+      userService.registerUser(request);
+      return ResponseEntity.ok("ユーザーが作成されました。");
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+    try {
+      String token = userService.login(request);
+      return ResponseEntity.ok(token);
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
 }

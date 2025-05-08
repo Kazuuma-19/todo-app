@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TodoRequest {
-    private String name;
-    private String date;
+  private String name;
+  private String date;
 }
