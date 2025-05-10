@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+
 import { axiosInstance } from "@/lib/axios";
 import { Label } from "@radix-ui/react-label";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -76,6 +77,16 @@ function RegisterIndex() {
           <Button type="submit" className="w-full">
             登録
           </Button>
+
+          <div className="text-right">
+            <Button
+              variant="link"
+              className="p-0"
+              onClick={() => navigate({ to: "/login" })}
+            >
+              ログインはこちらから
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>

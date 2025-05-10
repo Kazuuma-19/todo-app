@@ -1,8 +1,9 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { axiosInstance } from "@/lib/axios";
 
@@ -63,6 +64,16 @@ function LoginIndex() {
           <Button type="submit" className="w-full">
             ログイン
           </Button>
+
+          <div className="text-right">
+            <Button
+              variant="link"
+              className="p-0"
+              onClick={() => navigate({ to: "/register" })}
+            >
+              新規登録はこちらから
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>
