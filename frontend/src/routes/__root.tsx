@@ -14,11 +14,14 @@ export const Route = createRootRoute({
 function RootComponent() {
   const location = useRouterState({ select: (s) => s.location.pathname });
   const isLoginPage = location === "/login";
+  const isRegisterPage = location === "/register";
 
   return (
     <>
-      {isLoginPage ? (
-        <Outlet />
+      {isLoginPage || isRegisterPage ? (
+        <div className="h-screen bg-muted">
+          <Outlet />
+        </div>
       ) : (
         <Layout>
           <Outlet />
