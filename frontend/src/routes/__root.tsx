@@ -19,7 +19,9 @@ function RootComponent() {
   return (
     <>
       {isLoginPage || isRegisterPage ? (
-        <Outlet />
+        <div className="h-screen bg-muted">
+          <Outlet />
+        </div>
       ) : (
         <Layout>
           <Outlet />
