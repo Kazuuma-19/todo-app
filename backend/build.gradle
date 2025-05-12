@@ -4,17 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
     id("com.diffplug.spotless") version "7.0.3"
     id("checkstyle")
-}
-
-spotless {
-    java {
-        googleJavaFormat()
-    }
-}
-
-checkstyle {
-    toolVersion = "10.23.1"
-    config = resources.text.fromFile("config/checkstyle/google_checks.xml")
+    id 'jacoco'
 }
 
 group = 'com.example'
@@ -34,6 +24,38 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
+
+checkstyle {
+    toolVersion = "10.23.1"
+    config = resources.text.fromFile("config/checkstyle/google_checks.xml")
+}
+
+// jacoco settings
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacoco {
+    toolVersion = "0.8.13"
+    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
 }
 
 dependencies {
