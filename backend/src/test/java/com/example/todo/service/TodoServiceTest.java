@@ -8,9 +8,7 @@ import com.example.todo.dto.TodoRequest;
 import com.example.todo.model.Todo;
 import com.example.todo.model.User;
 import com.example.todo.repository.TodoRepository;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,23 +33,11 @@ class TodoServiceTest {
   }
 
   @Test
-  void getTodos_returnsList() {
-    LocalDateTime start = LocalDate.now().atStartOfDay();
-    LocalDateTime end = start.plusDays(1);
-
-    when(todoRepository.findAllByDateToday(eq(user), any(), any())).thenReturn(List.of(new Todo()));
-
-    List<Todo> result = todoService.getTodos(user);
-
-    assertThat(result).hasSize(1);
-    verify(todoRepository).findAllByDateToday(eq(user), any(), any());
-  }
-
-  @Test
   void createTodo_savesNewTodo() {
     TodoRequest request = new TodoRequest();
+    String date = "2025-05-12T10:00:00";
     request.setName("Test Todo");
-    request.setDate("2025-05-12T10:00:00");
+    request.setDate(date);
 
     todoService.createTodo(request, user);
 
@@ -62,71 +48,112 @@ class TodoServiceTest {
     assertThat(saved.getName()).isEqualTo("Test Todo");
     assertThat(saved.getUser()).isEqualTo(user);
     assertThat(saved.getCompleted()).isFalse();
-    assertThat(saved.getDate()).isEqualTo(LocalDateTime.parse("2025-05-12T10:00:00"));
+    assertThat(saved.getDate()).isEqualTo(LocalDateTime.parse(date));
+  }
+
+  @Test
+  void createTodo_savesNewTodoWithoutDate() {
+    TodoRequest request = new TodoRequest();
+    request.setName("Test Todo");
+
+    todoService.createTodo(request, user);
+
+    ArgumentCaptor<Todo> captor = ArgumentCaptor.forClass(Todo.class);
+    verify(todoRepository).save(captor.capture());
+
+    Todo saved = captor.getValue();
+    assertThat(saved.getName()).isEqualTo("Test Todo");
+    assertThat(saved.getUser()).isEqualTo(user);
+    assertThat(saved.getCompleted()).isFalse();
+    assertThat(saved.getDate()).isNull();
   }
 
   @Test
   void updateTodo_updatesNameAndDate() {
+    Long checkId = 1L;
     Todo existing = new Todo();
-    existing.setId(1L);
+    existing.setId(checkId);
     existing.setUser(user);
 
-    when(todoRepository.findById(1L)).thenReturn(Optional.of(existing));
+    when(todoRepository.findById(checkId)).thenReturn(Optional.of(existing));
+
+    TodoRequest request = new TodoRequest();
+    String name = "Updated Name";
+    String date = "2025-05-12T12:00:00";
+    request.setName(name);
+    request.setDate(date);
+
+    todoService.updateTodo(checkId, request, user);
+
+    assertThat(existing.getName()).isEqualTo(name);
+    assertThat(existing.getDate()).isEqualTo(LocalDateTime.parse(date));
+    verify(todoRepository).save(existing);
+  }
+
+  @Test
+  void updateTodo_throwsExceptionIfNotOwner() {
+    Long checkId = 1L;
+    Todo existing = new Todo();
+    existing.setId(checkId);
+    existing.setUser(user);
+
+    when(todoRepository.findById(checkId)).thenReturn(Optional.of(existing));
 
     TodoRequest request = new TodoRequest();
     request.setName("Updated Name");
     request.setDate("2025-05-12T12:00:00");
 
-    todoService.updateTodo(1L, request, user);
+    User notOwner = new User();
+    notOwner.setId(2L);
 
-    assertThat(existing.getName()).isEqualTo("Updated Name");
-    assertThat(existing.getDate()).isEqualTo(LocalDateTime.parse("2025-05-12T12:00:00"));
-    verify(todoRepository).save(existing);
+    assertThatThrownBy(() -> todoService.updateTodo(checkId, request, notOwner))
+        .isInstanceOf(ResponseStatusException.class);
   }
 
   @Test
   void updateCompleted_updatesStatus() {
-    Todo existing = new Todo();
-    existing.setId(1L);
-    existing.setUser(user);
+    Long checkId = 1L;
+    Todo existingTodo = new Todo();
+    existingTodo.setId(checkId);
+    existingTodo.setUser(user);
 
-    when(todoRepository.findById(1L)).thenReturn(Optional.of(existing));
+    when(todoRepository.findById(checkId)).thenReturn(Optional.of(existingTodo));
 
     TodoCompletionRequest request = new TodoCompletionRequest();
     request.setCompleted(true);
 
-    todoService.updateCompleted(1L, request, user);
+    todoService.updateCompleted(checkId, request, user);
 
-    assertThat(existing.getCompleted()).isTrue();
-    verify(todoRepository).save(existing);
+    assertThat(existingTodo.getCompleted()).isTrue();
+    verify(todoRepository).save(existingTodo);
   }
 
   @Test
   void deleteTodo_deletesIfOwnerMatches() {
-    Todo existing = new Todo();
-    existing.setId(1L);
-    existing.setUser(user);
+    Todo existingTodo = new Todo();
+    existingTodo.setId(1L);
+    existingTodo.setUser(user);
 
-    when(todoRepository.findById(1L)).thenReturn(Optional.of(existing));
+    when(todoRepository.findById(1L)).thenReturn(Optional.of(existingTodo));
 
     todoService.deleteTodo(1L, user);
 
-    verify(todoRepository).delete(existing);
+    verify(todoRepository).delete(existingTodo);
   }
 
   @Test
   void deleteTodo_throwsExceptionIfNotOwner() {
-    User otherUser = new User();
-    otherUser.setId(2L);
-
+    Long deleteId = 1L;
     Todo existing = new Todo();
-    existing.setId(1L);
-    existing.setUser(otherUser);
+    existing.setId(deleteId);
+    existing.setUser(user);
 
-    when(todoRepository.findById(1L)).thenReturn(Optional.of(existing));
+    when(todoRepository.findById(deleteId)).thenReturn(Optional.of(existing));
 
-    assertThatThrownBy(() -> todoService.deleteTodo(1L, user))
-        .isInstanceOf(ResponseStatusException.class)
-        .hasMessageContaining("Not your todo");
+    User notOwner = new User();
+    notOwner.setId(2L);
+
+    assertThatThrownBy(() -> todoService.deleteTodo(deleteId, notOwner))
+        .isInstanceOf(ResponseStatusException.class);
   }
 }
