@@ -5,13 +5,19 @@ import {
   deleteTodo,
 } from "@/features/today/api/todayTodoApi";
 import { useTodaySwr } from "./useTodaySwr";
+import { toast } from "sonner";
 
 export function useTodayTodos() {
   const { mutate } = useTodaySwr();
 
   const handleCreate = async (todo: { name: string; date: string }) => {
-    await createTodo(todo);
-    mutate();
+    try {
+      await createTodo(todo);
+      toast.success("タスクが作成されました");
+      mutate();
+    } catch (error) {
+      toast.error("タスクの作成に失敗しました");
+    }
   };
 
   const handleEdit = async (updates: {
@@ -29,8 +35,13 @@ export function useTodayTodos() {
   };
 
   const handleDelete = async (id: string) => {
-    await deleteTodo(id);
-    mutate();
+    try {
+      await deleteTodo(id);
+      toast.success("タスクが削除されました");
+      mutate();
+    } catch (error) {
+      toast.error("タスクの削除に失敗しました");
+    }
   };
 
   return {
