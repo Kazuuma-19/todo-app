@@ -1,6 +1,8 @@
+import { useTodaySwr } from "./hooks/useTodaySwr";
+
 import { CreateCard } from "@/components/CreateCard";
 import { EditCard } from "@/components/EditCard";
-import { useTodaySwr } from "./hooks/useTodaySwr";
+import { Toaster } from "sonner";
 
 type TodoListProps = {
   onCreate: (todo: { name: string; date: string }) => void;
@@ -27,6 +29,8 @@ export function TodoList({
       />
 
       <CreateCard onCreate={onCreate} />
+
+      <Toaster />
     </>
   );
 }
