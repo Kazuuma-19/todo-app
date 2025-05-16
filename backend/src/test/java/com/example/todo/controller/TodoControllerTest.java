@@ -15,11 +15,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(TodoController.class)
@@ -27,9 +27,9 @@ import org.springframework.test.web.servlet.MockMvc;
 class TodoControllerTest {
   @Autowired private MockMvc mockMvc;
 
-  @MockBean private TodoService todoService;
-  @MockBean private JwtService jwtService;
-  @MockBean private UserRepository userRepository;
+  @MockitoBean private TodoService todoService;
+  @MockitoBean private JwtService jwtService;
+  @MockitoBean private UserRepository userRepository;
 
   // JwtAuthenticationFilter で注入されるはずの User を事前に SecurityContext に設定する
   @BeforeEach
