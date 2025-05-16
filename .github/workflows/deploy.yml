@@ -70,16 +70,6 @@ jobs:
         run: echo "${{ secrets.APP_PROPERTIES_FILE }}" > src/main/resources/application.properties
         working-directory: backend
 
-      - name: Run tests
-        run: ./gradlew test
-
-      - name: Generate Jacoco Report in PR
-        uses: madrapps/jacoco-report@v1.7.2
-        with:
-          paths: ${{ github.workspace }}/backend/build/customJacocoReportDir/test/jacocoTestReport.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          skip-if-no-changes: true
-
       - name: Build Spring Boot App
         run: ./gradlew build
 
