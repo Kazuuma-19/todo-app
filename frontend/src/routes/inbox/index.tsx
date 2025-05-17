@@ -1,9 +1,9 @@
-import { InboxList } from "@/features/inbox/InboxList";
 import { createFileRoute } from "@tanstack/react-router";
-import { useInboxTodos } from "@/features/inbox/hooks/useInboxTodos";
+import { requireAuth } from "@/lib/requireAuth";
 
 import { SearchBox } from "@/components/SearchBox";
-import { requireAuth } from "@/lib/requireAuth";
+import { InboxList } from "@/features/inbox/InboxList";
+import { useInboxTodos } from "@/features/inbox/hooks/useInboxTodos";
 
 export const Route = createFileRoute("/inbox/")({
   beforeLoad: async () => {

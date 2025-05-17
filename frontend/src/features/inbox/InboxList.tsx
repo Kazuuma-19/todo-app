@@ -2,6 +2,7 @@ import { useInboxSwr } from "./hooks/useInboxSwr";
 
 import { CreateCard } from "@/components/CreateCard";
 import { EditCard } from "@/components/EditCard";
+import { Toaster } from "sonner";
 
 type TodoListProps = {
   onCreate: (todo: { name: string; date: string }) => void;
@@ -28,6 +29,8 @@ export function InboxList({
       />
 
       <CreateCard onCreate={onCreate} />
+
+      <Toaster />
     </>
   );
 }

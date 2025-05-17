@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { TodoList } from "@/features/today/TodoList";
-import { useTodayTodos } from "@/features/today/hooks/useTodayTodos";
+import { requireAuth } from "@/lib/requireAuth";
 
 import { SearchBox } from "@/components/SearchBox";
-import { requireAuth } from "@/lib/requireAuth";
+import { TodoList } from "@/features/today/TodoList";
+import { useTodayTodos } from "@/features/today/hooks/useTodayTodos";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
