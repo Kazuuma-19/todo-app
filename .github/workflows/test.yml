@@ -5,6 +5,12 @@ on:
     branches:
       - main
 
+permissions:
+  # Required to checkout the code
+  contents: read
+  # Required to put a comment into the pull-request
+  pull-requests: write
+
 jobs:
   frontend:
     name: Frontend Tests (Vitest)
@@ -32,6 +38,10 @@ jobs:
       - name: Report Coverage
         if: always()
         uses:  davelosert/vitest-coverage-report-action@v2
+        with:
+          vite-config-path: frontend/vite.config.ts
+          json-summary-path: frontend/coverage/coverage-summary.json
+          json-final-path: frontend/coverage/coverage-final.json
 
   backend:
     name:  Backend Tests (JUnit & JaCoCo)
