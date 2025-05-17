@@ -3,7 +3,6 @@ import { requireAuth } from "@/lib/requireAuth";
 
 import { SearchBox } from "@/components/SearchBox";
 import { InboxList } from "@/features/inbox/InboxList";
-import { useInboxTodos } from "@/features/inbox/hooks/useInboxTodos";
 
 export const Route = createFileRoute("/inbox/")({
   beforeLoad: async () => {
@@ -13,9 +12,6 @@ export const Route = createFileRoute("/inbox/")({
 });
 
 function InboxIndex() {
-  const { handleCreate, handleEdit, handleToggleComplete, handleDelete } =
-    useInboxTodos();
-
   return (
     <>
       <div className="flex items-center justify-between mb-4">
@@ -23,12 +19,7 @@ function InboxIndex() {
         <SearchBox />
       </div>
 
-      <InboxList
-        onCreate={handleCreate}
-        onEdit={handleEdit}
-        onToggleComplete={handleToggleComplete}
-        onDelete={handleDelete}
-      />
+      <InboxList />
     </>
   );
 }

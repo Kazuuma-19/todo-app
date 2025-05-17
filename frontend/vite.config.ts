@@ -21,6 +21,9 @@ export default defineConfig({
     globals: true, //　test, expectなどのimportが不要に
     environment: "happy-dom",
     setupFiles: "./src/testing/setup.ts",
+    env: {
+      VITE_BACKEND_API_URL: "http://localhost:8080", // テスト用の環境変数
+    },
     coverage: {
       // you can include other reporters, but 'json-summary' is required, json is recommended
       reporter: ["text", "json-summary", "json"],
