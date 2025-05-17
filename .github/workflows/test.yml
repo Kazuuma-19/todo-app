@@ -10,12 +10,6 @@ jobs:
     name: Frontend Tests (Vitest)
     runs-on: ubuntu-latest
 
-    permissions:
-      # Required to checkout the code
-      contents: read
-      # Required to put a comment into the pull-request
-      pull-requests: write
-
     defaults:
       run:
         working-directory: frontend
@@ -38,8 +32,6 @@ jobs:
       - name: Report Coverage
         if: always()
         uses:  davelosert/vitest-coverage-report-action@v2
-        with:
-          vite-config-path: vite.config.ts
 
   backend:
     name:  Backend Tests (JUnit & JaCoCo)
