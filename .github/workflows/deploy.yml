@@ -66,8 +66,8 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Create application.properties
-        run: echo "${{ secrets.APP_PROPERTIES_FILE }}" > src/main/resources/application.properties
+      - name: Create application.yml
+        run: echo "${{ secrets.APP_YAML_FILE }}" > src/main/resources/application.yml
         working-directory: backend
 
       - name: Build Spring Boot App

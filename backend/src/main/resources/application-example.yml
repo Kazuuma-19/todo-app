@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: todo-app
+
+  jpa:
+    hibernate:
+      ddl-auto: update # update table automatically based on Entity
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+# read from environment variable
+jwt:
+  secret: ${JWT_SECRET}
