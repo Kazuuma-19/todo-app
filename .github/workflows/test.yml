@@ -1,4 +1,4 @@
-name: Generate JaCoCo Report on PR
+name: Fullstack Test and Coverage
 
 on:
   pull_request:
@@ -6,8 +6,35 @@ on:
       - main
 
 jobs:
-  jacoco:
-    name: Run Tests and Report Coverage
+  frontend:
+    name: Frontend Tests (Vitest)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: npx vitest --coverage.enabled true
+
+      - name: Report Coverage
+        if: always()
+        uses:  davelosert/vitest-coverage-report-action@v2
+
+  backend:
+    name:  Backend Tests (JUnit & JaCoCo)
     runs-on: ubuntu-latest
 
     defaults:

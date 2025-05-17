@@ -21,5 +21,11 @@ export default defineConfig({
     globals: true, //　test, expectなどのimportが不要に
     environment: "happy-dom",
     setupFiles: "./src/testing/setup.ts",
+    coverage: {
+      // you can include other reporters, but 'json-summary' is required, json is recommended
+      reporter: ["text", "json-summary", "json"],
+      // If you want a coverage reports even if your tests are failing, include the reportOnFailure option
+      reportOnFailure: true,
+    },
   },
 });
