@@ -73,4 +73,3 @@ jobs:
         with:
           paths: ${{ github.workspace }}/backend/build/customJacocoReportDir/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          skip-if-no-changes: true
