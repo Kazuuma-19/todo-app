@@ -39,8 +39,9 @@ jobs:
         if: always()
         uses:  davelosert/vitest-coverage-report-action@v2
         with:
-          working-directory: frontend
-          vite-config-path: vite.config.ts
+          vite-config-path: frontend/vite.config.ts
+          json-summary-path: frontend/coverage/coverage-summary.json
+          json-final-path: frontend/coverage/coverage-final.json
 
   backend:
     name:  Backend Tests (JUnit & JaCoCo)
