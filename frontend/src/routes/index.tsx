@@ -3,7 +3,6 @@ import { requireAuth } from "@/lib/requireAuth";
 
 import { SearchBox } from "@/components/SearchBox";
 import { TodoList } from "@/features/today/TodoList";
-import { useTodayTodos } from "@/features/today/hooks/useTodayTodos";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -13,9 +12,6 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { handleCreate, handleEdit, handleToggleComplete, handleDelete } =
-    useTodayTodos();
-
   return (
     <>
       <div className="flex items-center justify-between mb-4">
@@ -23,12 +19,7 @@ function Index() {
         <SearchBox />
       </div>
 
-      <TodoList
-        onCreate={handleCreate}
-        onEdit={handleEdit}
-        onToggleComplete={handleToggleComplete}
-        onDelete={handleDelete}
-      />
+      <TodoList />
     </>
   );
 }
