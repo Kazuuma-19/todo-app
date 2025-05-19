@@ -41,3 +41,5 @@ application.yml
 
 .env.dev
 .env
+
+*:Zone.Identifier
