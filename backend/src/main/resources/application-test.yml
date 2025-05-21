@@ -1,0 +1,9 @@
+# integration test用の設定
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create # アプリケーション起動時にDBを再作成
+cors:
+  allowed-origins: http://localhost:5173
+jwt:
+  secret: Mx6Tgg1ybGxSiIRYNRcuWlMbzXJ7yaN7RRerJyBDiIo= # 32byte　テスト用
