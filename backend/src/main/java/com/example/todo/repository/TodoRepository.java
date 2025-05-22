@@ -17,7 +17,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
           AND :start <= t.date
           AND t.date < :end
         ORDER BY t.completed ASC, t.id ASC
-  """)
+      """)
   List<Todo> findAllByDateToday(
       @Param("user") User user,
       @Param("start") LocalDateTime start,
