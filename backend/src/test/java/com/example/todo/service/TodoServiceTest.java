@@ -9,6 +9,7 @@ import com.example.todo.model.Todo;
 import com.example.todo.model.User;
 import com.example.todo.repository.TodoRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,11 +26,19 @@ class TodoServiceTest {
   @InjectMocks private TodoService todoService;
 
   private User user;
+  private Todo todo;
 
   @BeforeEach
   void setup() {
     user = new User();
     user.setId(1L);
+
+    todo = new Todo();
+    todo.setId(1L);
+    todo.setCompleted(false);
+    todo.setName("Test Todo");
+    todo.setDate(LocalDateTime.now());
+    todo.setUser(user);
   }
 
   @Test
@@ -155,5 +164,15 @@ class TodoServiceTest {
 
     assertThatThrownBy(() -> todoService.deleteTodo(deleteId, notOwner))
         .isInstanceOf(ResponseStatusException.class);
+  }
+
+  @Test
+  void searchTodoByName_returnsMatchingTodos() {
+    String keyword = "test";
+    List<Todo> todos = List.of(this.todo, new Todo());
+    when(todoRepository.findByUserAndNameContainingIgnoreCase(this.user, keyword))
+        .thenReturn(todos);
+
+    assertThat(todoService.searchTodosByName(this.user, keyword)).isEqualTo(todos);
   }
 }

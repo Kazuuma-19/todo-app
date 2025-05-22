@@ -70,4 +70,14 @@ public class TodoService {
     Todo existingTodo = findAndCheckOwner(id, user);
     todoRepository.delete(existingTodo);
   }
+
+  /**
+   * Search todos by name.
+   *
+   * @param keyword the keyword to search for
+   * @return a list of todos that match the keyword
+   */
+  public List<Todo> searchTodosByName(User user, String keyword) {
+    return todoRepository.findByUserAndNameContainingIgnoreCase(user, keyword);
+  }
 }

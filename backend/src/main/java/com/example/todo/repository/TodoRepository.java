@@ -17,4 +17,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
       @Param("end") LocalDateTime end);
 
   List<Todo> findByUserOrderByCompletedAscDateAsc(User user);
+
+  // WHERE t.user = :user AND LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+  List<Todo> findByUserAndNameContainingIgnoreCase(User user, String keyword);
 }
