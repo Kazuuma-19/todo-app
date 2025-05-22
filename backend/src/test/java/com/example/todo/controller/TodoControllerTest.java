@@ -31,13 +31,25 @@ class TodoControllerTest {
   @MockitoBean private JwtService jwtService;
   @MockitoBean private UserRepository userRepository;
 
-  // JwtAuthenticationFilter で注入されるはずの User を事前に SecurityContext に設定する
+  private Todo todo1;
+  private Todo todo2;
+
   @BeforeEach
   void setUp() {
     User user = new User();
     user.setId(1L);
     user.setEmail("test@example.com");
 
+    // モックするTodoリスト
+    todo1 = new Todo();
+    todo1.setId(1L);
+    todo1.setName("Task 1");
+
+    todo2 = new Todo();
+    todo2.setId(2L);
+    todo2.setName("Task 2");
+
+    // JwtAuthenticationFilter で注入されるはずの User を事前に SecurityContext に設定する
     UsernamePasswordAuthenticationToken auth =
         new UsernamePasswordAuthenticationToken(
             user, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
@@ -46,15 +58,6 @@ class TodoControllerTest {
 
   @Test
   void testGetTodos() throws Exception {
-    // モックするTodoリスト
-    Todo todo1 = new Todo();
-    todo1.setId(1L);
-    todo1.setName("Task 1");
-
-    Todo todo2 = new Todo();
-    todo2.setId(2L);
-    todo2.setName("Task 2");
-
     List<Todo> mockTodos = Arrays.asList(todo1, todo2);
 
     // Service の振る舞いをモック
@@ -70,5 +73,21 @@ class TodoControllerTest {
 
     // getTodosが呼び出されたか確認
     verify(todoService).getTodos(any(User.class));
+  }
+
+  @Test
+  void searchTodos() throws Exception {
+    List<Todo> mockTodos = List.of(todo1, todo2);
+
+    when(todoService.searchTodosByName(any(User.class), any(String.class))).thenReturn(mockTodos);
+
+    mockMvc
+        .perform(get("/todos/search").param("q", "Task"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.length()").value(2))
+        .andExpect(jsonPath("$[0].name").value("Task 1"))
+        .andExpect(jsonPath("$[1].name").value("Task 2"));
+
+    verify(todoService).searchTodosByName(any(User.class), any(String.class));
   }
 }

@@ -24,6 +24,12 @@ public class TodoController {
     return todoService.getTodos(user);
   }
 
+  @GetMapping("/search")
+  public List<Todo> searchTodos(
+      @RequestParam("q") String keyword, @AuthenticationPrincipal User user) {
+    return todoService.searchTodosByName(user, keyword);
+  }
+
   @PostMapping
   public void createTodo(@RequestBody TodoRequest request, @AuthenticationPrincipal User user) {
     todoService.createTodo(request, user);
