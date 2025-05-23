@@ -5,7 +5,7 @@ front:
 	cd frontend && npm run dev
 
 build:
-	cd backend && ./gradlew build -x test
+	cd backend && ./gradlew build
 
 up:
 	docker compose -f backend/docker-compose.dev.yml --env-file backend/.env.dev up --build

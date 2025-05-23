@@ -33,13 +33,13 @@ describe("TodoList integration with MSW", () => {
     await user.click(screen.getByText("Add Task"));
     await user.type(screen.getByPlaceholderText("Task name"), "検索用タスク");
     await user.click(screen.getByRole("button", { name: "Add" }));
-    expect(await screen.findByText("検索用タスク")).toBeInTheDocument();
 
     // 表示されないタスク
     await user.click(screen.getByText("Add Task"));
     await user.type(screen.getByPlaceholderText("Task name"), "失敗用タスク");
     await user.click(screen.getByRole("button", { name: "Add" }));
 
+    expect(await screen.findByText("検索用タスク")).toBeInTheDocument();
     expect(await screen.findByText("失敗用タスク")).toBeInTheDocument();
 
     // 検索ボックスにキーワードを入力
@@ -48,5 +48,6 @@ describe("TodoList integration with MSW", () => {
 
     // キーワードに部分一致するタスクが表示されることを確認
     expect(await screen.findByText("検索用タスク")).toBeInTheDocument();
+    expect(await screen.queryByText("失敗用タスク")).not.toBeInTheDocument();
   });
 });
