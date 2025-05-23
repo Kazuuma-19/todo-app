@@ -11,7 +11,7 @@ export function TodoList() {
   const [keyword, setKeyword] = useState("");
   const { todos } = useTodaySwr(keyword);
   const { handleCreate, handleEdit, handleToggleComplete, handleDelete } =
-    useTodayTodos();
+    useTodayTodos(keyword);
 
   const onSearch = (keyword: string) => {
     setKeyword(keyword);
