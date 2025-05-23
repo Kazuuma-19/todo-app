@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import { Input } from "./ui/input";
 import { useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 
 type SearchBoxProps = {
   onSearch: (keyword: string) => void;
@@ -9,10 +10,17 @@ type SearchBoxProps = {
 export function SearchBox({ onSearch }: SearchBoxProps) {
   const [keyword, setKeyword] = useState("");
 
+  /**
+   * 300ms遅延でキーワードを検索
+   */
+  const debouncedSearch = useDebouncedCallback((value: string) => {
+    onSearch(value.trim());
+  }, 300);
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setKeyword(value);
-    onSearch(value);
+    debouncedSearch(value);
   };
 
   return (
