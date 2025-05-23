@@ -31,11 +31,16 @@ public class TodoService {
     return todo;
   }
 
-  public List<Todo> getTodos(User user) {
+  public List<Todo> getTodos(User user, String keyword) {
     LocalDate today = LocalDate.now();
     LocalDateTime startOfToday = today.atStartOfDay(); // 2025-04-01T00:00:00
     LocalDateTime startOfTomorrow = today.plusDays(1).atStartOfDay(); // 2025-04-02T00:00:00
-    return todoRepository.findAllByDateToday(user, startOfToday, startOfTomorrow);
+
+    if (keyword == null || keyword.isBlank()) {
+      return todoRepository.findAllByDateToday(user, startOfToday, startOfTomorrow);
+    }
+    return todoRepository.findByUserAndNameContainingIgnoreCaseAndDateToday(
+        user, keyword, startOfToday, startOfTomorrow);
   }
 
   public void createTodo(TodoRequest request, User user) {
@@ -69,15 +74,5 @@ public class TodoService {
   public void deleteTodo(Long id, User user) {
     Todo existingTodo = findAndCheckOwner(id, user);
     todoRepository.delete(existingTodo);
-  }
-
-  /**
-   * Search todos by name.
-   *
-   * @param keyword the keyword to search for
-   * @return a list of todos that match the keyword
-   */
-  public List<Todo> searchTodosByName(User user, String keyword) {
-    return todoRepository.findByUserAndNameContainingIgnoreCase(user, keyword);
   }
 }

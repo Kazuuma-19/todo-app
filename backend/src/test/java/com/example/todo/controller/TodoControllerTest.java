@@ -61,7 +61,7 @@ class TodoControllerTest {
     List<Todo> mockTodos = Arrays.asList(todo1, todo2);
 
     // Service の振る舞いをモック
-    when(todoService.getTodos(any(User.class))).thenReturn(mockTodos);
+    when(todoService.getTodos(any(User.class), nullable(String.class))).thenReturn(mockTodos);
 
     // API呼び出しと検証
     mockMvc
@@ -72,22 +72,6 @@ class TodoControllerTest {
         .andExpect(jsonPath("$[1].name").value("Task 2"));
 
     // getTodosが呼び出されたか確認
-    verify(todoService).getTodos(any(User.class));
-  }
-
-  @Test
-  void searchTodos() throws Exception {
-    List<Todo> mockTodos = List.of(todo1, todo2);
-
-    when(todoService.searchTodosByName(any(User.class), any(String.class))).thenReturn(mockTodos);
-
-    mockMvc
-        .perform(get("/todos/search").param("q", "Task"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.length()").value(2))
-        .andExpect(jsonPath("$[0].name").value("Task 1"))
-        .andExpect(jsonPath("$[1].name").value("Task 2"));
-
-    verify(todoService).searchTodosByName(any(User.class), any(String.class));
+    verify(todoService).getTodos(any(User.class), nullable(String.class));
   }
 }

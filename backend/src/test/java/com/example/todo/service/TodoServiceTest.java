@@ -8,6 +8,7 @@ import com.example.todo.dto.TodoRequest;
 import com.example.todo.model.Todo;
 import com.example.todo.model.User;
 import com.example.todo.repository.TodoRepository;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -169,10 +170,27 @@ class TodoServiceTest {
   @Test
   void searchTodoByName_returnsMatchingTodos() {
     String keyword = "test";
+    String blankKeyword = "  ";
+
     List<Todo> todos = List.of(this.todo, new Todo());
-    when(todoRepository.findByUserAndNameContainingIgnoreCase(this.user, keyword))
+    LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
+    LocalDateTime startOfTomorrow = startOfToday.plusDays(1);
+
+    when(todoRepository.findByUserAndNameContainingIgnoreCaseAndDateToday(
+            this.user, keyword, startOfToday, startOfTomorrow))
         .thenReturn(todos);
 
-    assertThat(todoService.searchTodosByName(this.user, keyword)).isEqualTo(todos);
+    // keywordがある場合、findByUserAndNameContainingIgnoreCaseAndDateTodayが呼ばれる
+    assertThat(todoService.getTodos(this.user, keyword)).isEqualTo(todos);
+    verify(todoRepository)
+        .findByUserAndNameContainingIgnoreCaseAndDateToday(
+            this.user, keyword, startOfToday, startOfTomorrow);
+
+    when(todoRepository.findAllByDateToday(this.user, startOfToday, startOfTomorrow))
+        .thenReturn(todos);
+
+    // keywordが空白の場合、findAllByDateTodayが呼ばれる
+    assertThat(todoService.getTodos(this.user, blankKeyword)).isEqualTo(todos);
+    verify(todoRepository).findAllByDateToday(this.user, startOfToday, startOfTomorrow);
   }
 }
