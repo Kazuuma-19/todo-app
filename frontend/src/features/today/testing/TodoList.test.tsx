@@ -44,7 +44,6 @@ describe("TodoList integration with MSW", () => {
 
     // 検索ボックスにキーワードを入力
     await user.type(screen.getByPlaceholderText("Search..."), "検索");
-    await user.keyboard("{enter}");
 
     // キーワードに部分一致するタスクが表示されることを確認
     expect(await screen.findByText("検索用タスク")).toBeInTheDocument();

@@ -9,10 +9,10 @@ type SearchBoxProps = {
 export function SearchBox({ onSearch }: SearchBoxProps) {
   const [keyword, setKeyword] = useState("");
 
-  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      onSearch(keyword);
-    }
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setKeyword(value);
+    onSearch(value);
   };
 
   return (
@@ -23,8 +23,7 @@ export function SearchBox({ onSearch }: SearchBoxProps) {
         placeholder="Search..."
         className="pl-9"
         value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-        onKeyDown={handleSearch}
+        onChange={handleSearch}
       />
     </div>
   );
