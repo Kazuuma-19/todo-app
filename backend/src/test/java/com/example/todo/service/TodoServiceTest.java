@@ -1,19 +1,25 @@
 package com.example.todo.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.example.todo.dto.TodoCompletionRequest;
 import com.example.todo.dto.TodoRequest;
 import com.example.todo.model.Todo;
 import com.example.todo.model.User;
 import com.example.todo.repository.TodoRepository;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,11 +31,19 @@ class TodoServiceTest {
   @InjectMocks private TodoService todoService;
 
   private User user;
+  private Todo todo;
 
   @BeforeEach
   void setup() {
     user = new User();
     user.setId(1L);
+
+    todo = new Todo();
+    todo.setId(1L);
+    todo.setCompleted(false);
+    todo.setName("Test Todo");
+    todo.setDate(LocalDateTime.now());
+    todo.setUser(user);
   }
 
   @Test
@@ -155,5 +169,32 @@ class TodoServiceTest {
 
     assertThatThrownBy(() -> todoService.deleteTodo(deleteId, notOwner))
         .isInstanceOf(ResponseStatusException.class);
+  }
+
+  @Test
+  void searchTodoByName_returnsMatchingTodos() {
+    String keyword = "test";
+    String blankKeyword = "  ";
+
+    List<Todo> todos = List.of(this.todo, new Todo());
+    LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
+    LocalDateTime startOfTomorrow = startOfToday.plusDays(1);
+
+    when(todoRepository.findByUserAndNameContainingIgnoreCaseAndDateToday(
+            this.user, keyword, startOfToday, startOfTomorrow))
+        .thenReturn(todos);
+
+    // keywordがある場合、findByUserAndNameContainingIgnoreCaseAndDateTodayが呼ばれる
+    assertThat(todoService.getTodos(this.user, keyword)).isEqualTo(todos);
+    verify(todoRepository)
+        .findByUserAndNameContainingIgnoreCaseAndDateToday(
+            this.user, keyword, startOfToday, startOfTomorrow);
+
+    when(todoRepository.findAllByDateToday(this.user, startOfToday, startOfTomorrow))
+        .thenReturn(todos);
+
+    // keywordが空白の場合、findAllByDateTodayが呼ばれる
+    assertThat(todoService.getTodos(this.user, blankKeyword)).isEqualTo(todos);
+    verify(todoRepository).findAllByDateToday(this.user, startOfToday, startOfTomorrow);
   }
 }

@@ -31,11 +31,16 @@ public class TodoService {
     return todo;
   }
 
-  public List<Todo> getTodos(User user) {
+  public List<Todo> getTodos(User user, String keyword) {
     LocalDate today = LocalDate.now();
     LocalDateTime startOfToday = today.atStartOfDay(); // 2025-04-01T00:00:00
     LocalDateTime startOfTomorrow = today.plusDays(1).atStartOfDay(); // 2025-04-02T00:00:00
-    return todoRepository.findAllByDateToday(user, startOfToday, startOfTomorrow);
+
+    if (keyword == null || keyword.isBlank()) {
+      return todoRepository.findAllByDateToday(user, startOfToday, startOfTomorrow);
+    }
+    return todoRepository.findByUserAndNameContainingIgnoreCaseAndDateToday(
+        user, keyword, startOfToday, startOfTomorrow);
   }
 
   public void createTodo(TodoRequest request, User user) {

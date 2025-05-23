@@ -20,8 +20,10 @@ public class TodoController {
   }
 
   @GetMapping
-  public List<Todo> getTodos(@AuthenticationPrincipal User user) {
-    return todoService.getTodos(user);
+  public List<Todo> getTodos(
+      @AuthenticationPrincipal User user,
+      @RequestParam(value = "q", required = false) String keyword) {
+    return todoService.getTodos(user, keyword);
   }
 
   @PostMapping

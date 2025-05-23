@@ -1,6 +1,10 @@
 package com.example.todo.controller;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -31,36 +35,43 @@ class TodoControllerTest {
   @MockitoBean private JwtService jwtService;
   @MockitoBean private UserRepository userRepository;
 
-  // JwtAuthenticationFilter で注入されるはずの User を事前に SecurityContext に設定する
+  private Todo todo1;
+  private Todo todo2;
+  private List<Todo> todoList;
+
   @BeforeEach
   void setUp() {
     User user = new User();
     user.setId(1L);
     user.setEmail("test@example.com");
 
+    // モックするTodoリスト
+    todo1 = new Todo();
+    todo1.setId(1L);
+    todo1.setName("Task 1");
+
+    todo2 = new Todo();
+    todo2.setId(2L);
+    todo2.setName("Task 2");
+
+    todoList = Arrays.asList(todo1, todo2);
+
+    // JwtAuthenticationFilter で注入されるはずの User を事前に SecurityContext に設定する
     UsernamePasswordAuthenticationToken auth =
         new UsernamePasswordAuthenticationToken(
             user, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
     SecurityContextHolder.getContext().setAuthentication(auth);
   }
 
+  /**
+   * クエリパラメータを指定しない場合に正常に動作するか
+   *
+   * @throws Exception
+   */
   @Test
   void testGetTodos() throws Exception {
-    // モックするTodoリスト
-    Todo todo1 = new Todo();
-    todo1.setId(1L);
-    todo1.setName("Task 1");
+    when(todoService.getTodos(any(User.class), nullable(String.class))).thenReturn(todoList);
 
-    Todo todo2 = new Todo();
-    todo2.setId(2L);
-    todo2.setName("Task 2");
-
-    List<Todo> mockTodos = Arrays.asList(todo1, todo2);
-
-    // Service の振る舞いをモック
-    when(todoService.getTodos(any(User.class))).thenReturn(mockTodos);
-
-    // API呼び出しと検証
     mockMvc
         .perform(get("/todos"))
         .andExpect(status().isOk())
@@ -68,7 +79,27 @@ class TodoControllerTest {
         .andExpect(jsonPath("$[0].name").value("Task 1"))
         .andExpect(jsonPath("$[1].name").value("Task 2"));
 
-    // getTodosが呼び出されたか確認
-    verify(todoService).getTodos(any(User.class));
+    verify(todoService).getTodos(any(User.class), nullable(String.class));
+  }
+
+  /**
+   * クエリパラメータを指定した場合に正常に動作するか
+   *
+   * @throws Exception
+   */
+  @Test
+  void testGetTodosWithKeyword() throws Exception {
+    String keyword = "Task";
+
+    when(todoService.getTodos(any(User.class), eq(keyword))).thenReturn(todoList);
+
+    mockMvc
+        .perform(get("/todos").param("q", keyword))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.length()").value(2))
+        .andExpect(jsonPath("$[0].name").value("Task 1"))
+        .andExpect(jsonPath("$[1].name").value("Task 2"));
+
+    verify(todoService).getTodos(any(User.class), eq(keyword));
   }
 }

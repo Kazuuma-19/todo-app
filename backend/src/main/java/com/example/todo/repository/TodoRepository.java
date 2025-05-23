@@ -10,11 +10,34 @@ import org.springframework.data.repository.query.Param;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
   @Query(
-      "SELECT t FROM Todo t WHERE t.user = :user AND :start <= t.date AND t.date < :end ORDER BY t.completed ASC, t.id ASC")
+      """
+        SELECT t
+        FROM Todo t
+        WHERE t.user = :user
+          AND :start <= t.date
+          AND t.date < :end
+        ORDER BY t.completed ASC, t.id ASC
+      """)
   List<Todo> findAllByDateToday(
       @Param("user") User user,
       @Param("start") LocalDateTime start,
       @Param("end") LocalDateTime end);
 
   List<Todo> findByUserOrderByCompletedAscDateAsc(User user);
+
+  @Query(
+      """
+        SELECT t
+        FROM Todo t
+        WHERE t.user = :user
+          AND LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+          AND :start <= t.date
+          AND t.date < :end
+        ORDER BY t.completed ASC, t.id ASC
+      """)
+  List<Todo> findByUserAndNameContainingIgnoreCaseAndDateToday(
+      @Param("user") User user,
+      @Param("keyword") String keyword,
+      @Param("start") LocalDateTime start,
+      @Param("end") LocalDateTime end);
 }
