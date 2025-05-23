@@ -3,8 +3,12 @@ import type { Todo } from "@/types/todo";
 
 const apiUrl = `${import.meta.env.VITE_BACKEND_API_URL}/todos`;
 
-export const fetchTodos = async (): Promise<Todo[]> => {
-  const response = await axiosInstance.get(apiUrl);
+export const fetchTodos = async (keyword: string): Promise<Todo[]> => {
+  const response = await axiosInstance.get(apiUrl, {
+    params: {
+      q: keyword,
+    },
+  });
   return response.data;
 };
 

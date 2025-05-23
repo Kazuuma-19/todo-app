@@ -23,4 +23,30 @@ describe("TodoList integration with MSW", () => {
     // 新しく追加されたタスクが表示されることを確認
     expect(await screen.findByText("買い物")).toBeInTheDocument();
   });
+
+  it("検索ボックスでEnterキーを押すとキーワードに部分一致するタスクが表示される", async () => {
+    const user = userEvent.setup();
+
+    render(<TodoList />, { wrapper });
+
+    // タスクを追加
+    await user.click(screen.getByText("Add Task"));
+    await user.type(screen.getByPlaceholderText("Task name"), "検索用タスク");
+    await user.click(screen.getByRole("button", { name: "Add" }));
+    expect(await screen.findByText("検索用タスク")).toBeInTheDocument();
+
+    // 表示されないタスク
+    await user.click(screen.getByText("Add Task"));
+    await user.type(screen.getByPlaceholderText("Task name"), "失敗用タスク");
+    await user.click(screen.getByRole("button", { name: "Add" }));
+
+    expect(await screen.findByText("失敗用タスク")).toBeInTheDocument();
+
+    // 検索ボックスにキーワードを入力
+    await user.type(screen.getByPlaceholderText("Search..."), "検索");
+    await user.keyboard("{enter}");
+
+    // キーワードに部分一致するタスクが表示されることを確認
+    expect(await screen.findByText("検索用タスク")).toBeInTheDocument();
+  });
 });
