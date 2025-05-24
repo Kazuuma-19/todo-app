@@ -41,6 +41,11 @@ checkstyle {
 // jacoco settings
 test {
     finalizedBy jacocoTestReport // report is always generated after tests run
+    // testログをターミナルに出力
+    testLogging {
+        exceptionFormat = "full" // 例外を詳しく表示
+        events "passed", "skipped", "failed" // 出力したいイベントを指定
+    }
 }
 
 jacoco {
