@@ -15,11 +15,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/** ユーザーコントローラー. */
 @RequiredArgsConstructor
 @RestController
 public class UserController {
   private final UserService userService;
 
+  /**
+   * ユーザー情報取得.
+   *
+   * @param user ユーザー
+   * @return ユーザー情報
+   */
   @GetMapping("/me")
   public ResponseEntity<Map<String, Object>> getMe(@AuthenticationPrincipal User user) {
     if (user == null) {
@@ -34,6 +41,12 @@ public class UserController {
     return ResponseEntity.ok(userInfo);
   }
 
+  /**
+   * ユーザー登録.
+   *
+   * @param request ユーザー登録リクエスト
+   * @return ユーザー登録レスポンス
+   */
   @PostMapping("/register")
   public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request) {
     try {
@@ -44,6 +57,12 @@ public class UserController {
     }
   }
 
+  /**
+   * ユーザーログイン.
+   *
+   * @param request ユーザーログインリクエスト
+   * @return ユーザーログインレスポンス
+   */
   @PostMapping("/login")
   public ResponseEntity<String> login(@RequestBody LoginRequest request) {
     try {

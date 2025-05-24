@@ -2,6 +2,7 @@ package com.example.todo.dto;
 
 import lombok.*;
 
+/** ログインリクエスト. */
 @Getter
 @Setter
 @NoArgsConstructor

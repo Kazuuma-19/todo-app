@@ -18,12 +18,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/** JWT認証フィルター. */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final JwtService jwtService;
   private final UserRepository userRepository;
 
+  /**
+   * JWT認証フィルター.
+   *
+   * @param request HttpServletRequest
+   * @param response HttpServletResponse
+   * @param filterChain FilterChain
+   * @throws ServletException ServletException
+   * @throws IOException IOException
+   */
   @Override
   protected void doFilterInternal(
       @NonNull HttpServletRequest request,

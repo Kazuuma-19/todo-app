@@ -12,11 +12,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+/** Inboxサービス. */
 @RequiredArgsConstructor
 @Service
 public class InboxService {
   private final TodoRepository todoRepository;
 
+  /**
+   * タスクを取得し、所有者を確認.
+   *
+   * @param id タスクID
+   * @param user ユーザー
+   * @return タスク
+   */
   private Todo findAndCheckOwner(Long id, User user) {
     Todo todo =
         todoRepository
@@ -30,10 +38,22 @@ public class InboxService {
     return todo;
   }
 
+  /**
+   * タスク一覧取得.
+   *
+   * @param user ユーザー
+   * @return タスク一覧
+   */
   public List<Todo> getTodos(User user) {
     return todoRepository.findByUserOrderByCompletedAscDateAsc(user);
   }
 
+  /**
+   * タスク作成.
+   *
+   * @param request タスクリクエスト
+   * @param user ユーザー
+   */
   public void createTodo(TodoRequest request, User user) {
     Todo todo = new Todo();
     todo.setName(request.getName());
@@ -45,6 +65,13 @@ public class InboxService {
     todoRepository.save(todo);
   }
 
+  /**
+   * タスク更新.
+   *
+   * @param id タスクID
+   * @param request タスクリクエスト
+   * @param user ユーザー
+   */
   public void updateTodo(Long id, TodoRequest request, User user) {
     Todo existingTodo = findAndCheckOwner(id, user);
 
@@ -56,12 +83,25 @@ public class InboxService {
     todoRepository.save(existingTodo);
   }
 
+  /**
+   * タスク完了更新.
+   *
+   * @param id タスクID
+   * @param request タスクリクエスト
+   * @param user ユーザー
+   */
   public void updateCompleted(Long id, TodoCompletionRequest request, User user) {
     Todo existingTodo = findAndCheckOwner(id, user);
     existingTodo.setCompleted(request.getCompleted());
     todoRepository.save(existingTodo);
   }
 
+  /**
+   * タスク削除.
+   *
+   * @param id タスクID
+   * @param user ユーザー
+   */
   public void deleteTodo(Long id, User user) {
     Todo existingTodo = findAndCheckOwner(id, user);
     todoRepository.delete(existingTodo);
