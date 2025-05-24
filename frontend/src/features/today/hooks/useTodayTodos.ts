@@ -7,8 +7,8 @@ import {
 import { useTodaySwr } from "./useTodaySwr";
 import { toast } from "sonner";
 
-export function useTodayTodos() {
-  const { mutate } = useTodaySwr();
+export function useTodayTodos(keyword: string) {
+  const { mutate } = useTodaySwr(keyword);
 
   const handleCreate = async (todo: { name: string; date: string }) => {
     try {
