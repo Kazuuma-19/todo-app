@@ -6,7 +6,8 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.todo.model.Todo;
 import com.example.todo.model.User;
@@ -64,9 +65,9 @@ class TodoControllerTest {
   }
 
   /**
-   * クエリパラメータを指定しない場合に正常に動作するか
+   * クエリパラメータを指定しない場合に正常に動作するか.
    *
-   * @throws Exception
+   * @throws Exception exception
    */
   @Test
   void testGetTodos() throws Exception {
@@ -83,9 +84,9 @@ class TodoControllerTest {
   }
 
   /**
-   * クエリパラメータを指定した場合に正常に動作するか
+   * クエリパラメータを指定した場合に正常に動作するか.
    *
-   * @throws Exception
+   * @throws Exception exception
    */
   @Test
   void testGetTodosWithKeyword() throws Exception {

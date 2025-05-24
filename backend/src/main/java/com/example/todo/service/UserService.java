@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/** ユーザーサービス. */
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -15,6 +16,11 @@ public class UserService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
 
+  /**
+   * ユーザー登録.
+   *
+   * @param request ユーザー登録リクエスト
+   */
   public void registerUser(RegisterRequest request) {
     if (userRepository.existsByEmail(request.getEmail())) {
       throw new IllegalArgumentException("このメールアドレスは既に登録されています。");
@@ -26,6 +32,12 @@ public class UserService {
     userRepository.save(user);
   }
 
+  /**
+   * ユーザーログイン.
+   *
+   * @param request ユーザーログインリクエスト
+   * @return ユーザーログインレスポンス
+   */
   public String login(LoginRequest request) {
     User user =
         userRepository
