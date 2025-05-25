@@ -23,7 +23,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(InboxController.class)
-public class InboxControllerTest {
+class InboxControllerTest {
   @Autowired private MockMvc mockMvc;
 
   @MockitoBean private InboxService inboxService;
