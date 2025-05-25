@@ -25,7 +25,7 @@ public class UserController {
   /**
    * ユーザー情報取得.
    *
-   * @param user ユーザー
+   * @param userDetails 認証ユーザー情報
    * @return ユーザー情報
    */
   @GetMapping("/me")
@@ -35,7 +35,7 @@ public class UserController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    User user = userDetails.getUser();
+    User user = userDetails.user();
 
     Map<String, Object> userInfo = new HashMap<>();
     userInfo.put("id", user.getId());

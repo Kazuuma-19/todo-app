@@ -44,7 +44,7 @@ public class TodoController {
   public List<Todo> getTodos(
       @AuthenticationPrincipal CustomUserDetails userDetails,
       @RequestParam(value = "q", required = false) String keyword) {
-    return todoService.getTodos(userDetails.getUser(), keyword);
+    return todoService.getTodos(userDetails.user(), keyword);
   }
 
   /**
@@ -56,7 +56,7 @@ public class TodoController {
   @PostMapping
   public void createTodo(
       @RequestBody TodoRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
-    todoService.createTodo(request, userDetails.getUser());
+    todoService.createTodo(request, userDetails.user());
   }
 
   /**
@@ -71,7 +71,7 @@ public class TodoController {
       @PathVariable Long id,
       @RequestBody TodoRequest request,
       @AuthenticationPrincipal CustomUserDetails userDetails) {
-    todoService.updateTodo(id, request, userDetails.getUser());
+    todoService.updateTodo(id, request, userDetails.user());
   }
 
   /**
@@ -86,7 +86,7 @@ public class TodoController {
       @PathVariable Long id,
       @RequestBody TodoCompletionRequest request,
       @AuthenticationPrincipal CustomUserDetails userDetails) {
-    todoService.updateCompleted(id, request, userDetails.getUser());
+    todoService.updateCompleted(id, request, userDetails.user());
   }
 
   /**
@@ -98,6 +98,6 @@ public class TodoController {
   @DeleteMapping("/{id}")
   public void deleteTodo(
       @PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
-    todoService.deleteTodo(id, userDetails.getUser());
+    todoService.deleteTodo(id, userDetails.user());
   }
 }

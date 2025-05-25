@@ -36,7 +36,7 @@ public class InboxController {
   public List<Todo> getTodos(
       @AuthenticationPrincipal CustomUserDetails userDetails,
       @RequestParam(value = "q", required = false) String keyword) {
-    return inboxService.getTodos(userDetails.getUser(), keyword);
+    return inboxService.getTodos(userDetails.user(), keyword);
   }
 
   /**
@@ -48,7 +48,7 @@ public class InboxController {
   @PostMapping
   public void createTodo(
       @RequestBody TodoRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
-    inboxService.createTodo(request, userDetails.getUser());
+    inboxService.createTodo(request, userDetails.user());
   }
 
   /**
@@ -63,7 +63,7 @@ public class InboxController {
       @PathVariable Long id,
       @RequestBody TodoRequest request,
       @AuthenticationPrincipal CustomUserDetails userDetails) {
-    inboxService.updateTodo(id, request, userDetails.getUser());
+    inboxService.updateTodo(id, request, userDetails.user());
   }
 
   /**
@@ -78,7 +78,7 @@ public class InboxController {
       @PathVariable Long id,
       @RequestBody TodoCompletionRequest request,
       @AuthenticationPrincipal CustomUserDetails userDetails) {
-    inboxService.updateCompleted(id, request, userDetails.getUser());
+    inboxService.updateCompleted(id, request, userDetails.user());
   }
 
   /**
@@ -90,6 +90,6 @@ public class InboxController {
   @DeleteMapping("/{id}")
   public void deleteTodo(
       @PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
-    inboxService.deleteTodo(id, userDetails.getUser());
+    inboxService.deleteTodo(id, userDetails.user());
   }
 }
