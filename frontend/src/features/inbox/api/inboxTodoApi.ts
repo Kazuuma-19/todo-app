@@ -2,8 +2,12 @@ import { axiosInstance } from "@/lib/axios";
 
 const apiUrl = `${import.meta.env.VITE_BACKEND_API_URL}/inbox`;
 
-export const fetchTodos = async () => {
-  const response = await axiosInstance.get(apiUrl);
+export const fetchTodos = async (keyword: string) => {
+  const response = await axiosInstance.get(apiUrl, {
+    params: {
+      q: keyword,
+    },
+  });
   return response.data;
 };
 

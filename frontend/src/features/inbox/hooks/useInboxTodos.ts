@@ -7,8 +7,8 @@ import {
 import { useInboxSwr } from "./useInboxSwr";
 import { toast } from "sonner";
 
-export function useInboxTodos() {
-  const { mutate } = useInboxSwr();
+export function useInboxTodos(keyword: string) {
+  const { mutate } = useInboxSwr(keyword);
 
   const handleCreate = async (todo: { name: string; date: string }) => {
     try {
