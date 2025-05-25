@@ -3,6 +3,7 @@ package com.example.todo.controller;
 import com.example.todo.dto.LoginRequest;
 import com.example.todo.dto.RegisterRequest;
 import com.example.todo.model.User;
+import com.example.todo.security.CustomUserDetails;
 import com.example.todo.service.UserService;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,10 +29,13 @@ public class UserController {
    * @return ユーザー情報
    */
   @GetMapping("/me")
-  public ResponseEntity<Map<String, Object>> getMe(@AuthenticationPrincipal User user) {
-    if (user == null) {
+  public ResponseEntity<Map<String, Object>> getMe(
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    if (userDetails == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    User user = userDetails.getUser();
 
     Map<String, Object> userInfo = new HashMap<>();
     userInfo.put("id", user.getId());

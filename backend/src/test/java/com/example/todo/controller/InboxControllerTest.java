@@ -10,6 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.todo.model.Todo;
 import com.example.todo.model.User;
 import com.example.todo.repository.UserRepository;
+import com.example.todo.security.CustomUserDetails;
+import com.example.todo.service.CustomUserDetailsService;
 import com.example.todo.service.InboxService;
 import com.example.todo.service.JwtService;
 import java.util.List;
@@ -18,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,12 +31,15 @@ class InboxControllerTest {
   @MockitoBean private InboxService inboxService;
   @MockitoBean private JwtService jwtService;
   @MockitoBean private UserRepository userRepository;
+  @MockitoBean private CustomUserDetailsService customUserDetailsService;
 
   @BeforeEach
   void setUp() {
+    User user = User.builder().id(1L).email("test@test.com").passwordHash("test").build();
+    CustomUserDetails userDetails = new CustomUserDetails(user);
+    // ユーザー情報をセキュリティコンテキストにセットし、擬似的に認証状態を作成
     UsernamePasswordAuthenticationToken auth =
-        new UsernamePasswordAuthenticationToken(
-            new User(), null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     SecurityContextHolder.getContext().setAuthentication(auth);
   }
 

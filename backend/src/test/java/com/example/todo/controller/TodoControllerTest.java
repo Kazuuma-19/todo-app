@@ -12,6 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.todo.model.Todo;
 import com.example.todo.model.User;
 import com.example.todo.repository.UserRepository;
+import com.example.todo.security.CustomUserDetails;
+import com.example.todo.service.CustomUserDetailsService;
 import com.example.todo.service.JwtService;
 import com.example.todo.service.TodoService;
 import java.util.Arrays;
@@ -21,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -35,6 +36,7 @@ class TodoControllerTest {
   @MockitoBean private TodoService todoService;
   @MockitoBean private JwtService jwtService;
   @MockitoBean private UserRepository userRepository;
+  @MockitoBean private CustomUserDetailsService customUserDetailsService;
 
   private Todo todo1;
   private Todo todo2;
@@ -58,9 +60,9 @@ class TodoControllerTest {
     todoList = Arrays.asList(todo1, todo2);
 
     // JwtAuthenticationFilter で注入されるはずの User を事前に SecurityContext に設定する
+    CustomUserDetails userDetails = new CustomUserDetails(user);
     UsernamePasswordAuthenticationToken auth =
-        new UsernamePasswordAuthenticationToken(
-            user, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     SecurityContextHolder.getContext().setAuthentication(auth);
   }
 
