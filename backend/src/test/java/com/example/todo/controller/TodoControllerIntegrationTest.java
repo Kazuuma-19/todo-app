@@ -8,15 +8,14 @@ import com.example.todo.model.Todo;
 import com.example.todo.model.User;
 import com.example.todo.repository.TodoRepository;
 import com.example.todo.repository.UserRepository;
+import com.example.todo.security.CustomUserDetails;
 import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -96,10 +95,10 @@ class TodoControllerIntegrationTest {
     todoRepository.save(yesterdaysTask);
 
     // JwtAuthenticationFilterで注入されるはずのUserを事前にSecurityContextに設定する
-    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-    securityContext.setAuthentication(
-        new UsernamePasswordAuthenticationToken(authenticatedUser, null, List.of())); // 権限は空
-    SecurityContextHolder.setContext(securityContext);
+    CustomUserDetails userDetails = new CustomUserDetails(authenticatedUser);
+    UsernamePasswordAuthenticationToken auth =
+        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    SecurityContextHolder.getContext().setAuthentication(auth);
   }
 
   @Test

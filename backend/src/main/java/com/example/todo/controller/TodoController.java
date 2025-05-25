@@ -3,7 +3,7 @@ package com.example.todo.controller;
 import com.example.todo.dto.TodoCompletionRequest;
 import com.example.todo.dto.TodoRequest;
 import com.example.todo.model.Todo;
-import com.example.todo.model.User;
+import com.example.todo.security.CustomUserDetails;
 import com.example.todo.service.TodoService;
 import java.util.List;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,26 +36,27 @@ public class TodoController {
   /**
    * タスク一覧取得.
    *
-   * @param user ユーザー
+   * @param userDetails 認証ユーザー情報
    * @param keyword 検索キーワード
    * @return タスク一覧
    */
   @GetMapping
   public List<Todo> getTodos(
-      @AuthenticationPrincipal User user,
+      @AuthenticationPrincipal CustomUserDetails userDetails,
       @RequestParam(value = "q", required = false) String keyword) {
-    return todoService.getTodos(user, keyword);
+    return todoService.getTodos(userDetails.getUser(), keyword);
   }
 
   /**
    * タスク作成.
    *
    * @param request タスクリクエスト
-   * @param user ユーザー
+   * @param userDetails 認証ユーザー情報
    */
   @PostMapping
-  public void createTodo(@RequestBody TodoRequest request, @AuthenticationPrincipal User user) {
-    todoService.createTodo(request, user);
+  public void createTodo(
+      @RequestBody TodoRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    todoService.createTodo(request, userDetails.getUser());
   }
 
   /**
@@ -63,12 +64,14 @@ public class TodoController {
    *
    * @param id タスクID
    * @param request タスクリクエスト
-   * @param user ユーザー
+   * @param userDetails 認証ユーザー情報
    */
   @PutMapping("/{id}")
   public void updateTodo(
-      @PathVariable Long id, @RequestBody TodoRequest request, @AuthenticationPrincipal User user) {
-    todoService.updateTodo(id, request, user);
+      @PathVariable Long id,
+      @RequestBody TodoRequest request,
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    todoService.updateTodo(id, request, userDetails.getUser());
   }
 
   /**
@@ -76,24 +79,25 @@ public class TodoController {
    *
    * @param id タスクID
    * @param request タスクリクエスト
-   * @param user ユーザー
+   * @param userDetails 認証ユーザー情報
    */
   @PatchMapping("/{id}/completed")
   public void updateCompleted(
       @PathVariable Long id,
       @RequestBody TodoCompletionRequest request,
-      @AuthenticationPrincipal User user) {
-    todoService.updateCompleted(id, request, user);
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    todoService.updateCompleted(id, request, userDetails.getUser());
   }
 
   /**
    * タスク削除.
    *
    * @param id タスクID
-   * @param user ユーザー
+   * @param userDetails 認証ユーザー情報
    */
   @DeleteMapping("/{id}")
-  public void deleteTodo(@PathVariable Long id, @AuthenticationPrincipal User user) {
-    todoService.deleteTodo(id, user);
+  public void deleteTodo(
+      @PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    todoService.deleteTodo(id, userDetails.getUser());
   }
 }

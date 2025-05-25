@@ -1,20 +1,18 @@
 package com.example.todo.filter;
 
-import com.example.todo.model.User;
 import com.example.todo.repository.UserRepository;
+import com.example.todo.service.CustomUserDetailsService;
 import com.example.todo.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final JwtService jwtService;
   private final UserRepository userRepository;
+  private final CustomUserDetailsService userDetailsService;
 
   /**
    * JWT認証フィルター.
@@ -57,13 +56,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // Check if the user is already authenticated
     if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      User user = userRepository.findByEmail(email).orElse(null);
-      if (user != null) {
-        // Add roles to user
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
-
+      UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+      if (jwtService.isTokenValid(token, userDetails)) {
+        // If the token is valid, set the authentication in the security context
         UsernamePasswordAuthenticationToken authToken =
-            new UsernamePasswordAuthenticationToken(user, null, authorities);
+            new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
     }
