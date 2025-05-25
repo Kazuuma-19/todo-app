@@ -44,8 +44,11 @@ public class InboxService {
    * @param user ユーザー
    * @return タスク一覧
    */
-  public List<Todo> getTodos(User user) {
-    return todoRepository.findByUserOrderByCompletedAscDateAsc(user);
+  public List<Todo> getTodos(User user, String keyword) {
+    if (keyword == null || keyword.isBlank()) {
+      return todoRepository.findByUserOrderByCompletedAscDateAsc(user);
+    }
+    return todoRepository.findByUserAndNameContainingIgnoreCase(user, keyword);
   }
 
   /**

@@ -2,6 +2,8 @@ package com.example.todo.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.todo.model.Todo;
@@ -20,8 +22,16 @@ class InboxServiceTest {
   @Mock private TodoRepository todoRepository;
   @InjectMocks private InboxService inboxService;
 
+  private String blankKeyword;
+  private String nullKeyword;
+  private String keyword;
+
   @BeforeEach
-  void setup() {}
+  void setup() {
+    blankKeyword = " ";
+    nullKeyword = null;
+    keyword = "test";
+  }
 
   @Test
   void todoRepositoryが呼ばれ正しく値が返却されるかをテスト() {
@@ -32,9 +42,22 @@ class InboxServiceTest {
     when(todoRepository.findByUserOrderByCompletedAscDateAsc(any(User.class)))
         .thenReturn(List.of(todo));
 
-    List<Todo> getAllTodo = inboxService.getTodos(new User());
+    List<Todo> getAllTodo = inboxService.getTodos(new User(), blankKeyword);
 
     assertThat(getAllTodo.getFirst().getId()).isEqualTo(1L);
     assertThat(getAllTodo.getFirst().getName()).isEqualTo("Test Todo");
+  }
+
+  @Test
+  void keywordの有無によって呼ばれるメソッドが変更されるかをテスト() {
+    User user = User.builder().id(1L).email("test@example.com").build();
+
+    inboxService.getTodos(user, blankKeyword);
+    inboxService.getTodos(user, nullKeyword);
+    inboxService.getTodos(user, keyword);
+
+    verify(todoRepository, times(2)).findByUserOrderByCompletedAscDateAsc(any(User.class));
+    verify(todoRepository, times(1))
+        .findByUserAndNameContainingIgnoreCase(any(User.class), any(String.class));
   }
 }

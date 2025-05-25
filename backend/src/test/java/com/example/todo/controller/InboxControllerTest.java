@@ -1,6 +1,7 @@
 package com.example.todo.controller;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.nullable;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -44,7 +45,7 @@ class InboxControllerTest {
     Todo todo2 = Todo.builder().id(2L).name("Task 2").build();
     List<Todo> todos = List.of(todo1, todo2);
 
-    when(inboxService.getTodos(any(User.class))).thenReturn(todos);
+    when(inboxService.getTodos(any(User.class), nullable(String.class))).thenReturn(todos);
 
     mockMvc
         .perform(get("/inbox"))

@@ -33,14 +33,6 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
       @Param("end") LocalDateTime end);
 
   /**
-   * ユーザーのタスクを完了してないものから並べて取得する.
-   *
-   * @param user ユーザー
-   * @return タスクリスト
-   */
-  List<Todo> findByUserOrderByCompletedAscDateAsc(User user);
-
-  /**
    * keywordから曖昧検索を行い、一致する今日のタスクを取得する.
    *
    * @param user ユーザー
@@ -64,4 +56,30 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
       @Param("keyword") String keyword,
       @Param("start") LocalDateTime start,
       @Param("end") LocalDateTime end);
+
+  /**
+   * ユーザーのタスクを完了してないものから並べて取得する.
+   *
+   * @param user ユーザー
+   * @return タスクリスト
+   */
+  List<Todo> findByUserOrderByCompletedAscDateAsc(User user);
+
+  /**
+   * keywordを基に曖昧検索をし、すべてのタスクを取得する.
+   *
+   * @param user ユーザー
+   * @param keyword キーワード
+   * @return タスクリスト
+   */
+  @Query(
+      """
+            SELECT t
+            FROM Todo t
+            WHERE t.user = :user
+              AND LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            ORDER BY t.completed ASC, t.date ASC
+          """)
+  List<Todo> findByUserAndNameContainingIgnoreCase(
+      @Param("user") User user, @Param("keyword") String keyword);
 }
