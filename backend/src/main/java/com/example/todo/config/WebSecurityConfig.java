@@ -4,6 +4,7 @@ import com.example.todo.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,7 +20,7 @@ public class WebSecurityConfig {
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
   /**
-   * 認証を無視するURLを設定.
+   * セキュリティフィルターチェーンを設定.
    *
    * @param http HttpSecurityオブジェクト
    * @return SecurityFilterChainオブジェクト
@@ -30,7 +31,9 @@ public class WebSecurityConfig {
     http.csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/register", "/login")
+                auth.requestMatchers(HttpMethod.OPTIONS, "/**") // allow preflight requests
+                    .permitAll()
+                    .requestMatchers("/register", "/login")
                     .permitAll()
                     .anyRequest()
                     .authenticated())

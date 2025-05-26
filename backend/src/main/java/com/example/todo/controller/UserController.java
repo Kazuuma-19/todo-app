@@ -73,7 +73,7 @@ public class UserController {
       String token = userService.login(request);
       return ResponseEntity.ok(token);
     } catch (IllegalArgumentException e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
   }
 }
