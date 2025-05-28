@@ -9,10 +9,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 
 type ConfirmDialogProps = {
-  triggerLabel: string;
+  trigger: React.ReactNode;
   title: string;
   description: string;
   confirmLabel: string;
@@ -21,7 +20,7 @@ type ConfirmDialogProps = {
 };
 
 export function ConfirmDialog({
-  triggerLabel,
+  trigger,
   title,
   description,
   confirmLabel,
@@ -30,9 +29,7 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button className="w-full">{triggerLabel}</Button>
-      </AlertDialogTrigger>
+      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -42,8 +39,15 @@ export function ConfirmDialog({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>
+          <AlertDialogCancel onClick={(e) => e.stopPropagation()}>
+            {cancelLabel}
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={(e) => {
+              e.stopPropagation();
+              onConfirm();
+            }}
+          >
             {confirmLabel}
           </AlertDialogAction>
         </AlertDialogFooter>
