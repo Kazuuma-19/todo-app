@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 export function SettingBox() {
   const user = useAtomValue(authUserAtom);
@@ -33,11 +33,13 @@ export function SettingBox() {
             <p className="mt-1 text-gray-700">{user?.email}</p>
           </div>
 
-          <div className="pt-4 border-t">
-            <Button onClick={handleLogout} className="w-full">
-              ログアウト
-            </Button>
-          </div>
+          <ConfirmDialog
+            triggerLabel="ログアウト"
+            title="本当にログアウトしてもよろしいですか？"
+            description="ログアウト後はログイン画面に遷移します。"
+            confirmLabel="ログアウト"
+            onConfirm={handleLogout}
+          />
         </CardContent>
       </Card>
     </>
