@@ -7,7 +7,7 @@ type SearchBoxProps = {
   onSearch: (keyword: string) => void;
 };
 
-export function SearchBox({ onSearch }: SearchBoxProps) {
+export function SearchBox({ onSearch }: Readonly<SearchBoxProps>) {
   const [keyword, setKeyword] = useState("");
 
   /**

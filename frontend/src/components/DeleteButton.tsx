@@ -9,24 +9,22 @@ type DeleteButtonProps = {
   onDelete: (id: string) => void;
 };
 
-export function DeleteButton({ todo, onDelete }: DeleteButtonProps) {
+export function DeleteButton({ todo, onDelete }: Readonly<DeleteButtonProps>) {
   return (
-    <>
-      <ConfirmDialog
-        trigger={
-          <Button
-            variant="ghost"
-            className="h-8 w-8 text-gray-500 hover:text-red-500"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        }
-        title="本当に削除してもよろしいですか？"
-        description="削除後は元に戻すことはできません。"
-        confirmLabel="削除"
-        onConfirm={() => onDelete(todo.id)}
-      />
-    </>
+    <ConfirmDialog
+      trigger={
+        <Button
+          variant="ghost"
+          className="h-8 w-8 text-gray-500 hover:text-red-500"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      }
+      title="本当に削除してもよろしいですか？"
+      description="削除後は元に戻すことはできません。"
+      confirmLabel="削除"
+      onConfirm={() => onDelete(todo.id)}
+    />
   );
 }

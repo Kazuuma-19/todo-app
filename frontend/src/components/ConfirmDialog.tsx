@@ -26,7 +26,7 @@ export function ConfirmDialog({
   confirmLabel,
   cancelLabel = "キャンセル",
   onConfirm,
-}: ConfirmDialogProps) {
+}: Readonly<ConfirmDialogProps>) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
