@@ -21,7 +21,7 @@ checkstyle {
 
 sonar {
     properties {
-        property "sonar.projectKey", "Kazuuma-19_todo-app-backend"
+        property "sonar.projectKey", "kazuuma-19_todo-app-backend"
         property "sonar.organization", "kazuuma-19"
         property "sonar.host.url", "https://sonarcloud.io"
     }
