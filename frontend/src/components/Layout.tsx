@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <SidebarProvider>
       <AppSidebar />

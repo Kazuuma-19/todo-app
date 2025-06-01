@@ -11,7 +11,7 @@ type CreateTaskCardProps = {
   onCreate: (todo: NewTodo) => void;
 };
 
-export function CreateCard({ onCreate }: CreateTaskCardProps) {
+export function CreateCard({ onCreate }: Readonly<CreateTaskCardProps>) {
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [newTodo, setNewTodo] = useState<NewTodo>({
     name: "",
@@ -84,13 +84,14 @@ export function CreateCard({ onCreate }: CreateTaskCardProps) {
           </div>
         </div>
       ) : (
-        <div
-          className="flex items-center space-x-2 mt-4 p-3 rounded-lg cursor-pointer hover:bg-gray-50"
+        <button
+          type="button"
+          className="flex items-center space-x-2 mt-4 p-3 w-full rounded-lg cursor-pointer hover:bg-gray-50"
           onClick={() => setIsCreating(true)}
         >
           <Plus className="h-4 w-4" />
           <div className="font-bold">Add Task</div>
-        </div>
+        </button>
       )}
     </>
   );

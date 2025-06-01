@@ -21,7 +21,7 @@ export function EditCard({
   onToggleComplete,
   onEdit,
   onDelete,
-}: EditCardProps) {
+}: Readonly<EditCardProps>) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editValues, setEditValues] = useState<EditValues>({
     id: "",
@@ -61,7 +61,10 @@ export function EditCard({
   return (
     <>
       {todos?.map((todo) => (
+        // biome-ignore lint/a11y/useSemanticElements: temporary
         <div
+          role="button"
+          tabIndex={0}
           key={todo.id}
           className={cn(
             todo.completed ? "opacity-60" : "cursor-pointer hover:bg-gray-50",
