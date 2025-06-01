@@ -5,6 +5,26 @@ plugins {
     id("com.diffplug.spotless") version "7.0.3"
     id("checkstyle")
     id 'jacoco'
+    id "org.sonarqube" version "6.2.0.5505"
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
+
+checkstyle {
+    toolVersion = "10.23.1"
+    config = resources.text.fromFile("config/checkstyle/google_checks.xml")
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "Kazuuma-19_todo-app"
+        property "sonar.organization", "kazuuma-19"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 group = 'com.example'
@@ -24,18 +44,6 @@ configurations {
 
 repositories {
     mavenCentral()
-}
-
-
-spotless {
-    java {
-        googleJavaFormat()
-    }
-}
-
-checkstyle {
-    toolVersion = "10.23.1"
-    config = resources.text.fromFile("config/checkstyle/google_checks.xml")
 }
 
 // jacoco settings
