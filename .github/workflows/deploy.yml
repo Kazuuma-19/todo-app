@@ -24,7 +24,7 @@ jobs:
           node-version: '22'  # 使用するNode.jsのバージョン
 
       - name: Install dependencies
-        run: npm install  # 必要な依存パッケージをインストール
+        run: npm ci  # 必要な依存パッケージをインストール
 
       - name: Create .env file
         run: echo "${{ secrets.FRONT_ENV_FILE }}" > .env

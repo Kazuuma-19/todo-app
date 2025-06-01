@@ -26,7 +26,7 @@ export default defineConfig({
     },
     coverage: {
       // you can include other reporters, but 'json-summary' is required, json is recommended
-      reporter: ["text", "json-summary", "json"],
+      reporter: ["text", "json-summary", "json", "lcov"],
       // If you want a coverage reports even if your tests are failing, include the reportOnFailure option
       reportOnFailure: true,
     },
