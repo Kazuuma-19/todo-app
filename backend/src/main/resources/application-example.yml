@@ -11,3 +11,13 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   expiration-ms: 3600000 # 1 hour
+
+sentry:
+  dsn: https://your-sentry-dsn.com
+  # Add data like request headers and IP for users,
+  # see https://docs.sentry.io/platforms/java/guides/spring-boot/data-management/data-collected/ for more info
+  send-default-pii: true
+  traces-sample-rate: 0.1 # 10% of transactions are sent to Sentry
+  logging:
+    minimum-event-level: info # minimum level of events sent to Sentry
+    minimum-breadcrumb-level: debug # minimum level of breadcrumbs sent to Sentry

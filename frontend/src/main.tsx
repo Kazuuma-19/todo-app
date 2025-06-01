@@ -22,7 +22,7 @@ Sentry.init({
   // Setting this option to true will send default PII data to Sentry.
   // For example, automatic IP address collection on events
   sendDefaultPii: true,
-  tracesSampleRate: 0.2, // 10%の確率でトレースを送信
+  tracesSampleRate: 0.1, // 10%の確率でトレースを送信
   integrations: [Sentry.browserTracingIntegration()], // どのページでどれくらいの時間を費やしているかを計測
 });
 
