@@ -44,6 +44,8 @@ jobs:
   analyze-backend:
     name: Analyze Backend (Spring Boot)
     runs-on: ubuntu-latest
+    env:
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
     defaults:
       run:

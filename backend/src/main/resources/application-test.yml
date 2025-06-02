@@ -7,3 +7,5 @@ cors:
   allowed-origins: http://localhost:5173
 jwt:
   secret: Mx6Tgg1ybGxSiIRYNRcuWlMbzXJ7yaN7RRerJyBDiIo= # 32byte　テスト用
+sentry:
+  enabled: false # Sentryを無効化
