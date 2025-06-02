@@ -72,6 +72,8 @@ jobs:
 
       - name: Build Spring Boot App
         run: ./gradlew build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Create .env file
         run: echo "${{ secrets.ENV_FILE }}" > .env
