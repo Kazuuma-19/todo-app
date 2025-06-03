@@ -2,6 +2,10 @@ FROM openjdk:21
 
 WORKDIR /app
 
+ADD https://dtdg.co/latest-java-tracer dd-java-agent.jar
+
+ENV JAVA_TOOL_OPTIONS="-javaagent:/app/dd-java-agent.jar"
+
 COPY build/libs/todo-0.0.1-SNAPSHOT.jar /app/todo-app.jar
 
 ENTRYPOINT ["java", "-jar", "/app/todo-app.jar"]
