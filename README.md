@@ -47,6 +47,11 @@
 
 ### 🔁 CI/CD
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=githubactions&logoColor=white)
+![SonarQube](https://img.shields.io/badge/SonarQube-4E9BCD?logo=sonarqube&logoColor=white)  
+
+### 📈 Monitoring / Logging  
+![Sentry](https://img.shields.io/badge/Sentry-362D59?logo=sentry&logoColor=white)
+![Datadog](https://img.shields.io/badge/Datadog-632CA6?logo=datadog&logoColor=white)
 
 ## 🚀 Getting Started
 ### 🧱 プロジェクトの初期化・実行
